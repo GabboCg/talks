@@ -1,0 +1,399 @@
+\documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$babel-lang$,$endif$$if(handout)$handout,$endif$$if(beamer)$ignorenonframetext,$endif$$for(classoption)$$classoption$$sep$,$endfor$$if(make149)$,aspectratio=149$endif$]{$documentclass$}
+$if(theme)$
+\usetheme{$theme$}
+$endif$
+$if(colortheme)$
+\usecolortheme{$colortheme$}
+$endif$
+$if(fonttheme)$
+\usefonttheme{$fonttheme$}
+$endif$
+$if(mainfont)$
+\usefonttheme{serif} % use mainfont rather than sansfont for slide text
+$endif$
+$if(innertheme)$
+\useinnertheme{$innertheme$}
+$endif$
+$if(outertheme)$
+\useoutertheme{$outertheme$}
+$endif$
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+$if(fontfamily)$
+\usepackage[$fontfamilyoptions$]{$fontfamily$}
+$else$
+\usepackage{lmodern}
+$endif$
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
+  \usepackage[utf8]{inputenc}
+$if(euro)$
+  \usepackage{eurosym}
+$endif$
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+$if(mainfont)$
+    \setmainfont[$mainfontoptions$]{$mainfont$}
+$endif$
+$if(sansfont)$
+    \setsansfont[$sansfontoptions$]{$sansfont$}
+$endif$
+$if(monofont)$
+    \setmonofont[Mapping=tex-ansi$if(monofontoptions)$,$monofontoptions$$endif$]{$monofont$}
+$endif$
+$if(mathfont)$
+    \setmathfont(Digits,Latin,Greek)[$mathfontoptions$]{$mathfont$}
+$endif$
+$if(CJKmainfont)$
+    \usepackage{xeCJK}
+    \setCJKmainfont[$CJKoptions$]{$CJKmainfont$}
+$endif$
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+$if(lang)$
+\ifxetex
+  \usepackage{polyglossia}
+  \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
+$for(polyglossia-otherlangs)$
+  \setotherlanguage[$polyglossia-otherlangs.options$]{$polyglossia-otherlangs.name$}
+$endfor$
+\else
+  \usepackage[shorthands=off,$babel-lang$]{babel}
+\fi
+$endif$
+$if(natbib)$
+\usepackage{natbib}
+\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+$endif$
+$if(biblatex)$
+\usepackage[citestyle=authoryear, bibstyle=numeric]{biblatex}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+$endif$
+$if(listings)$
+\usepackage{listings}
+$endif$
+$if(lhs)$
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+$endif$
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+$if(verbatim-in-note)$
+\usepackage{fancyvrb}
+\VerbatimFootnotes % allows verbatim text in footnotes
+$endif$
+$if(tables)$
+\usepackage{longtable,booktabs}
+\usepackage{caption}
+% These lines are needed to make table captions work with longtable:
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+$endif$
+$if(graphics)$
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight0.8\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+$endif$
+
+% Comment these out if you don't want a slide with just the
+% part/section/subsection/subsubsection title:
+\AtBeginPart{
+  \let\insertpartnumber\relax
+  \let\partname\relax
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \let\insertsectionnumber\relax
+  \let\sectionname\relax
+  \frame{\sectionpage}
+}
+\AtBeginSubsection{
+  \let\insertsubsectionnumber\relax
+  \let\subsectionname\relax
+  \frame{\subsectionpage}
+}
+
+$if(links-as-notes)$
+% Make links footnotes instead of hotlinks:
+\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
+$endif$
+$if(strikeout)$
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+$endif$
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+$if(numbersections)$
+\setcounter{secnumdepth}{5}
+$else$
+\setcounter{secnumdepth}{0}
+$endif$
+$if(dir)$
+\ifxetex
+  % load bidi as late as possible as it modifies e.g. graphicx
+  $if(latex-dir-rtl)$
+  \usepackage[RTLdocument]{bidi}
+  $else$
+  \usepackage{bidi}
+  $endif$
+\fi
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \TeXXeTstate=1
+  \newcommand{\RL}[1]{\beginR #1\endR}
+  \newcommand{\LR}[1]{\beginL #1\endL}
+  \newenvironment{RTL}{\beginR}{\endR}
+  \newenvironment{LTR}{\beginL}{\endL}
+\fi
+$endif$
+
+$if(title)$
+\title{$title$}
+$endif$
+$if(subtitle)$
+\subtitle{$subtitle$}
+$endif$
+$if(author)$
+\author{$for(author)$$author$$sep$ \and $endfor$}
+$endif$
+\date{$date$}
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+\setbeamertemplate{frametitle}{%
+    %\nointerlineskip
+    \begin{beamercolorbox}[sep=0.3cm,ht=1.8em,wd=\paperwidth]{frametitle}
+        \vbox{}\vskip-2ex%
+        \strut\insertframetitle\strut
+        \hfill
+        \raisebox{-0.95mm}{\includegraphics[width=0.65cm]{$righlogo$}}
+        \vskip-1ex%
+    \end{beamercolorbox}
+}
+
+$if(institute)$\institute[]{$institute$}$endif$
+
+\usepackage{fontawesome}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks = true,       % false: boxed links; true: colored links
+    linkcolor = .,          % color of internal links (change box color with linkbordercolor)
+    citecolor = green!60!black,        % color of links to bibliography
+    filecolor = .,      % color of file links
+    urlcolor = .           % color of external links
+}
+
+\makeatletter
+\let\@mycite\@cite
+\def\@cite#1#2{{\hypersetup{linkcolor=green!60!black}[\textbf{#1\if@tempswa , #2\fi}]}}
+\makeatother
+
+% \makeatletter
+% \def\gobblesomething#1\csname theequation\endcsname{(\theequation)}
+% \renewcommand{\p@equation}{\gobblesomething}
+% \makeatother
+
+\usepackage{xcolor}
+\colorlet{linkequation}{green!60!black}
+% \usepackage[colorlinks]{hyperref}
+
+\newcommand*{\SavedEqref}{}
+\let\SavedEqref\eqref
+\renewcommand*{\eqref}[1]{%
+  \begingroup
+    \hypersetup{
+      linkcolor=linkequation,
+      linkbordercolor=linkequation,
+    }%
+    \SavedEqref{#1}%
+  \endgroup
+}
+
+\setlength{\parindent}{0pt}
+
+\renewenvironment{Shaded}{\vspace{1em}}{\vspace{0.5em}}
+
+\usepackage{fvextra}
+% \usepackage{verbatim}
+
+% make console-output smaller:
+\makeatletter
+\def\verbatim{\scriptsize\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
+\makeatother
+
+% make code-output smaller
+\usepackage{fvextra}
+
+% \DefineVerbatimEnvironment{Highlighting}{Verbatim}{fontsize=\scriptsize,
+%                                                    breaklines = true,
+%                                                    numbers=left,
+%                                                    framesep=1mm,
+%                                                    highlightcolor = yellow,
+%                                                    % highlightlines = {1},
+%                                                    frame=single, 
+%                                                    commandchars=\\\{\}}
+
+\fvset{frame=single,
+       framesep=1mm,
+       breaklines = true, 
+       fontfamily=courier,
+       fontsize=\scriptsize,
+       numbers=left,
+       framerule=.1mm,
+       numbersep=1mm,
+       commandchars=\\\{\}
+}
+                                                   
+% declare overall beamer theme to use as baseline
+\usepackage{ragged2e}
+\apptocmd{\frame}{}{\justifying}{}
+
+\usepackage{etoolbox}
+
+\AtBeginDocument{%
+  \letcs\oig{@orig\string\includegraphics}%
+  \renewcommand<>\includegraphics[2][]{%
+    \only#3{%
+      {\centering\oig[{#1}]{#2}\par}%
+    }%
+  }%
+}
+
+
+\setbeamerfont{title}{series=\bfseries}
+\newcommand\boldblue[1]{\textcolor{blue}{\textbf{#1}}}
+\newcommand\boldred[1]{\textcolor{red}{\textbf{#1}}}
+
+\newcommand\red[1]{\textcolor{red}{\text{#1}}}
+
+\defbeamertemplate{section in toc}{muhhh}
+{\leavevmode\leftskip=1.75ex%
+  \llap{%
+    \usebeamerfont*{section number projected}%
+    \usebeamercolor[bg]{section number projected}%
+    \vrule width2.7ex height2.12ex depth.58ex%
+    \hskip-2.7ex%
+    \hbox to2.7ex{\hfil\color{fg}\inserttocsectionnumber\hfil}}%
+  \kern1.5ex\inserttocsection\par}
+
+\setbeamertemplate{section in toc}[muhhh]
+\setbeamertemplate{enumerate items}[default]
+
+\setbeamercolor{block title}{use=structure,fg=structure.fg,bg=structure.fg!20!bg}
+\setbeamercolor{block body}{parent=normal text,use=block title,bg=block title.bg!50!bg}
+
+\setbeamercolor{block title example}{use=example text,fg=example text.fg,bg=example text.fg!20!bg}
+\setbeamercolor{block body example}{parent=normal text,use=block title example,bg=block title example.bg!50!bg}
+
+\addtobeamertemplate{proof begin}{%
+    \setbeamercolor{block title}{fg=black,bg=red!50!white}
+    \setbeamercolor{block body}{fg=red, bg=red!30!white}
+}{}
+
+\BeforeBeginEnvironment{theorem}{
+    \setbeamercolor{block title}{fg=black,bg=orange!50!white}
+    \setbeamercolor{block body}{fg=orange, bg=orange!30!white}
+}
+\AfterEndEnvironment{theorem}{
+ \setbeamercolor{block title}{use=structure,fg=structure.fg,bg=structure.fg!20!bg}
+ \setbeamercolor{block body}{parent=normal text,use=block title,bg=block title.bg!50!bg, fg=black}
+}
+
+\BeforeBeginEnvironment{definition}{%
+    \setbeamercolor{block title}{fg=black,bg=pink!50!white}
+    \setbeamercolor{block body}{fg=pink, bg=pink!30!white}
+}
+\AfterEndEnvironment{definition}{
+ \setbeamercolor{block title}{use=structure,fg=structure.fg,bg=structure.fg!20!bg}
+ \setbeamercolor{block body}{parent=normal text,use=block title,bg=block title.bg!50!bg, fg=black}
+}
+
+\begin{document}
+
+$if(title)$
+\frame{\titlepage}
+$endif$
+
+\begin{frame}
+\frametitle{Información de contacto} 
+
+\begin{center}
+
+\faSend  \enskip \href{mailto:}{$email$} \\
+\faChain \enskip \href{https://$website$/}{$website$} \\
+\faTwitter \enskip \href{https://twitter.com/@$twitter$}{$twitter$}  \\
+\faGithub \enskip \href{https://github.com/@$github$}{$github$} \\
+\faMapMarker \enskip $ubication$ 
+\end{center}
+\end{frame}
+
+$for(include-before)$
+$include-before$
+
+$endfor$
+$if(toc)$
+\begin{frame}
+\tableofcontents[hideallsubsections]
+\end{frame}
+
+$endif$
+
+%\section[]{}
+\frame{\small \frametitle{Tabla de contenido} % Table of Contents
+\tableofcontents}
+
+$body$
+$if(natbib)$
+$if(bibliography)$
+$if(biblio-title)$
+$if(book-class)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+\begin{frame}[allowframebreaks]{$biblio-title$}
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+\end{frame}
+
+$endif$
+$endif$
+$if(biblatex)$
+\begin{frame}[allowframebreaks]{$biblio-title$}
+\printbibliography[heading=none]
+\end{frame}
+
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
+\end{document}
