@@ -1,6 +1,6 @@
 ![](https://escudouchile.files.wordpress.com/2012/06/logo-facultad-de-economc3ada-y-negocios-universidad-de-chile.png)
 
-# Presentaciones Ayudantías
+# Presentaciones ENMEC357
 
 |Nª   |Fecha       |Presentación                              |Material |
 |:---:|:---:       |:---:                                     |:---:    |  
