@@ -55,7 +55,7 @@ install.packages("IntroCompFinR", repos="http://R-Forge.R-project.org")
 
 ##
 
-3. Otra opción es simplemente cargar las funciones, sin necesidad de instalar y cargar la librería. 
+3. Otra opción es simplemente cargar las funciones, sin necesidad de instalar y cargar el paquete. 
 Estas quedarán en el *Global Environment*.
 
 ```r 
@@ -566,17 +566,4 @@ g5 <- g5 + ggtitle("Trade-off Riesgo-Retorno",
                    subtitle = "Tres activos riesgosos & minima varianza")
 g5
 ```
-
-# Medidas de performance 
-
-## Ratio de Sharpe 
-
-[@sharpe1994sharpe]
-
-## Alpha de Jensen
-
-[@jensen1968performance]
-
-## Medida de Treynor
-
 
