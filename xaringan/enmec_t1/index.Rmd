@@ -271,7 +271,7 @@ class: center, inverse, middle
 # Material de Apoyo 
 ---
 
-# Recomendaciones
+# Recomendaciones 
 
 Resumenes:
 
@@ -287,6 +287,17 @@ Libros basados en R Markdown de [Yihui Xie](https://yihui.name/en/):
 2. [Bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/)
 
 3. [Blogdown: Creating Websites with R Markdown](https://bookdown.org/yihui/blogdown/)
+
+---
+# Videos  `r fontawesome::fa("youtube", fill = "#ee5863")` 
+
+ `r fontawesome::fa("link", fill = "green")` [Parte 1: Preliminares](https://youtu.be/x402qUhrO9g)   
+
+ `r fontawesome::fa("link", fill = "green")` [Parte 2: Elementos Básicos](https://youtu.be/jonFm1p6CNU)
+
+ `r fontawesome::fa("link", fill = "green")` [Parte 3: R Code Chunk](https://youtu.be/-5Yw46YcIr0)
+
+ `r fontawesome::fa("link", fill = "green")` [Parte 4: Documento PDF](https://youtu.be/dZvPS2YTST4)  
 
 ---
 
