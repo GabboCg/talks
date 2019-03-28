@@ -4,8 +4,8 @@
                                                                                                                         
 |Nª   |Fecha       |Presentación                              |Material                                                             |Solución                                                              | 
 |:---:|:---:       |:---:                                     |:---:                                                                |:---:                                                                 |
-|1    |`2019-25-03`|[R Markdown](xaringan/enmec_t1/index.html)|[:link:](https://www.dropbox.com/s/mmil33cylowumkz/material.zip?dl=1)|[:lightbulb:](https://www.dropbox.com/s/gjr3cvgphlue3at/solution.zip?dl=1)|
-|2    |`2019-25-03`|[Tidyquant](xaringan/enmec_t1/index.html) |[:link:](https://www.dropbox.com/s/mmil33cylowumkz/material.zip?dl=1)|[:lightbulb:](https://www.dropbox.com/s/gjr3cvgphlue3at/solution.zip?dl=1)|
+|1    |`2019-25-03`|[R Markdown](xaringan/enmec_t1/index.html)|[:link:](https://www.dropbox.com/s/mmil33cylowumkz/material.zip?dl=1)|[:fa-ticket:](https://www.dropbox.com/s/gjr3cvgphlue3at/solution.zip?dl=1)|
+|2    |`2019-25-03`|[Tidyquant](xaringan/enmec_t1/index.html) |[:link:](https://www.dropbox.com/s/mmil33cylowumkz/material.zip?dl=1)|[:fa-ticket:](https://www.dropbox.com/s/gjr3cvgphlue3at/solution.zip?dl=1)|
 
 
 # Presentaciones ENFIN415
