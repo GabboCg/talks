@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Tidyquant</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gabriel Cabrera   Universidad de Chile      GaboCg      @GaboC_g    gcabrerag@fen.uchile.cl" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/5235085b15.js"></script>
+    <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="css/my-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Tidyquant
+## Trasladando el análisis financiero al Tidyverse
+### Gabriel Cabrera <br> Universidad de Chile <br><br> <a href="https://github.com/GaboCg"><i class="fa fa-github fa-fw"></i>  GaboCg </a><br> <a href="https://twitter.com/GaboC_g"> <i class="fa fa-twitter fa-fw"></i>  <span class="citation">@GaboC_g</span></a><br> <a href="mailto:gcabrerag@fen.uchile.cl"><i class="fa fa-paper-plane fa-fw"></i>  gcabrerag@fen.uchile.cl</a><br>
+
+---
+
+
+
+
+class: middle
+
+&lt;blockquote cite="http://www.worldwildlife.org/who/index.html"&gt;
+
+"Wealth consists not in having great possessions, but in having few wants."
+
+&lt;p align="right"&gt; Epicteto,&lt;i&gt; Filosofo Griego &lt;/i&gt;.&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+---
+class: center, inverse, middle
+
+# Breve historia
+
+---
+background-image: url(https://business-science.github.io/tidyquant/reference/figures/tidyquant-logo.png)
+background-size: 80px
+background-position: 97% 5%
+
+# Paquete Tidyquant
+
+1. Una "megalibrería" creada por Matt Dancho ([`@mdancho84`](https://twitter.com/mdancho84?lang=es)) y proxima a ser la base del libro "Reproducible Finance with R: Code Flows and Shiny Apps for Portfolio Analysis" de  Jonathan K. Regenstein Jr. ([`@jkregenstein`](https://twitter.com/jkregenstein?lang=es))
+
+2. **tidyquant** integra los mejores recursos/librerías para colectar y analizar datos financieros: zoo, xts, quantmod, TTR y PerformanceAnalytic, con la infraestructura **tidy data**^[Para mayor detalle ver el paper "Tidy Data (2014)" de Hadley Wickham.] del tidyverse, permitiendo la interacción entre ambos.
+
+3. Nos permite implementar las funciones de  **ggplot2**. 
+
+---
+
+# Breve resumen de las librerías
+
+1. xts o eXtensible time series: Es una estructura dato y a la vez una librería para manipular series de tiempo. Detras se encuentra la estructura zoo.
+
+2. quantmod o  Quantitative Financial Modelling &amp; Trading Framework: Es una librería diseñada para 
+recuperar, manipular y modelar datos cuantitativos financieros. 
+
+3. TTR o Technical Trading Rules: Librería que incluye varias funciones para computar análisis técnico.
+
+4. PerformanceAnalytics: Librería que incluye una colección de funciones econométricas para desempeño y análisis de riesgo. Se necesita los retornos y no los precios. 
+
+---
+
+# Pequeñas funciones con mucho poder
+
+1. Obtener data de diversas fuentes podemos usar `tq_get()`.
+
+2. Transmutar data: `tq_transmute()`.
+
+3. mutar data: `tq_mutate()`.
+
+4. Análisis de "performance": ``tq_performance()`.
+
+¿Qué sucede si escribimos `tq_index()`, `tq_index_option` o `tq_exchange()`?
+
+---
+
+# Descargando el S&amp;P 500
+
+Cargamos las librerías con las que vamos a trabajar
+
+
+```r
+if(!require("pacman")) install.packages("pacman")
+p_load("tidyverse","tidyquant","ggthemes")
+```
+
+Imaginemos por una momento que necesitamos obtener los precios del S&amp;P 500 desde Enero del 2010 hasta 31 de Agosto del 2018 con periodicidad diaria:
+
+
+```r
+sp500_precio  &lt;- tq_get("^GSPC", 
+                        get = "stock.prices", 
+                        from = "2010-01-01", 
+                        to = "2018-08-01", 
+                        periodicity = "daily")
+```
+
+Tener presente que `get` es que "tipo" de datos financieros van a decargar. Cuando usamos `stock.prices`, se obtienen los datos desde [Yahoo Finance](https://finance.yahoo.com). Si quisiera los *finacial statements*, escribo `get = "financial"` y los descarga desde **Google Finance**.
+
+---
+
+# Ahora con quantmod
+
+Podemos hacer los mismo de muchas formas, por ejemplo, usar directamente `quantmod`
+
+
+```r
+sp500_quantmod &lt;- getSymbols("^GSPC", 
+                             src = "yahoo",
+                             from = "2010-01-01", 
+                             to = "2018-08-01", 
+                             periodicity = "daily")
+```
+
+
+Lo positivo de usar quantmod es que podemos aprovechar las funciones `chartSeries()`
+
+
+```r
+chartSeries(GSPC)
+```
+
+Para verlo sin los *volume*
+
+
+```r
+chartSeries(GSPC, TA = NULL)
+```
+
+Para ver los últimos 3 meses
+
+
+```r
+chartSeries(GSPC, subset = "last 3 months")
+```
+
+---
+
+Podemos replicar el objeto creado `sp500_precio` usando:
+
+
+```r
+sp500_quantmod &lt;- as.data.frame(GSPC) %&gt;%
+                  as.tibble() %&gt;% 
+                  mutate(date = index(GSPC)) %&gt;% 
+                  rename("open" = "GSPC.Open", "high" = "GSPC.High",     
+                         "low"  = "GSPC.Low" , "close"= "GSPC.Close", 
+                         "volume" = "GSPC.Volume", "adjusted" = "GSPC.Adjusted")
+```
+
+
+¿Qué podemos observar?
+
+---
+
+# Ahora con ggplot2
+
+Continuaremos con el objeto `sp500_precio`, pero lo graficaremos usando ggplot2:
+
+```r
+*g &lt;- ggplot(sp500_precio) + geom_line(aes(date,adjusted), color = "red")
+g &lt;- g + labs(title = "Precio S&amp;P 500", subtitle = "Desde Enero 2010 hasta Julio 2018")
+g &lt;- g + theme_tq() + scale_color_tq() 
+g &lt;- g + xlab("Periodo") + ylab("Precio")
+g 
+```
+
+---
+
+
+```r
+g &lt;- ggplot(sp500_precio) + geom_line(aes(date,adjusted), color = "red")
+g &lt;- g + labs(title = "Precio S&amp;P 500", subtitle = "Desde Enero 2010 hasta Julio 2018")
+g &lt;- g + theme_tq() + scale_color_tq() 
+g &lt;- g + xlab("Periodo") + ylab("Precio")
+g 
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+Si extrañan stata ... pueden usar
+
+
+```r
+sp500_quantmod %&gt;%  
+     ggplot() + 
+     geom_line(aes(date,adjusted), color = "red" ) + 
+     labs(title = "Precio S&amp;P 500", subtitle = "Desde Enero 2010 hasta Julio 2018") + 
+     theme_stata() + xlab("Periodo") + ylab("Precio") + 
+     scale_color_stata()
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+Para realizarlo deben usar la librería `ggthemes`.
+
+---
+class: center, inverse, middle
+
+# Multiples Datos
+
+---
+
+# Descargando Multiples Datos 
+
+Ahora veremos como podemos descargar más de un activo. Usaremos las siguientes empresas: Oracle (ORCL), Intel (IT), Nvidia (NVDA) y Netflix (NFLX). Comenzamos con construir un objeto `tickers` con los nombres.
+
+
+```r
+tickers &lt;- c("ORCL", "IT", "NVDA", "NFLX")
+```
+
+Luego obtenemos los activos^[La opción `to` considera la fecha anterior a la solicitada.]. 
+
+
+```r
+data_activos  &lt;- tq_get(tickers, 
+                        get = "stock.prices", 
+                        from = "2010-01-01", 
+                        to = "2018-08-01", 
+                        periodicity = "daily")
+```
+
+---
+class: center, inverse, middle
+# Retornos y Retornos Acumulados 
+
+---
+
+# Calculo Retornos
+
+La formula para calcular (log) retornos es:
+
+$$
+r_t = log(1 + R_t) = log(\frac{P_t}{P_{t-1}}) = p_t - p_{t-1}
+$$
+
+donde `\(p_t = log(P_t)\)` es llamado "log price".
+
+
+```r
+retornos_activos &lt;- data_activos %&gt;% 
+                       group_by(symbol) %&gt;% 
+                       tq_transmute(select = close,
+                                    mutate_fun = periodReturn,
+                                    period = "daily",
+                                    type = "log",
+                                    col_rename = "retornos.diarios")
+```
+
+---
+
+# Calculo Retornos Acumulados 
+
+Como el nombre sugiere, el retorno acumulado indica el efecto agregado del precio. Podremos ver con mayor facilidad si se mantienen las perdidas (ganancias) por un periodo dado. 
+
+
+```r
+retornos_acum_activos &lt;- retornos_activos %&gt;% 
+                            group_by(symbol) %&gt;% 
+                            mutate(ret.cum = cumsum(retornos.diarios))
+```
+
+---
+
+# Gráficando Retornos 
+
+Una manera de graficar los retornos es usar `geom_density()`, que es la versión suavisada de un histograma y se suele usar para datos que son continuos. Intenten con `geom_line()` y vean que sucede.
+
+```r
+retornos_activos %&gt;% 
+  ggplot(mapping = aes(x = retornos.diarios, fill = symbol))+
+  geom_density(alpha = 0.5) +
+  labs(title = "Retornos Activos", 
+       subtitle = "Oracle (ORCL), Intel (IT), Nvidia (NVDA) y Netflix (NFLX)",
+       x = "Retornos diarios", y = "Densidad") + 
+  theme_tq() +
+  scale_fill_tq() + 
+  facet_wrap(~ symbol, ncol = 2) + 
+  guides(fill=guide_legend(title="Activos:"))
+```
+
+---
+class: middle
+
+
+```r
+retornos_activos %&gt;% 
+  ggplot(mapping = aes(x = retornos.diarios, fill = symbol))+
+  geom_density(alpha = 0.5) +
+  labs(title = "Retornos Activos", subtitle = "Oracle (ORCL), Intel (IT), Nvidia (NVDA) y Netflix (NFLX)",
+       x = "Retornos diarios", y = "Densidad") + 
+  theme_tq() +
+  scale_fill_tq() + 
+  facet_wrap(~ symbol, ncol = 2) + 
+  guides(fill=guide_legend(title="Activos:"))
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Gráficando Retornos Acumulados 
+
+Para graficar los retornos acumulados, se recomienda usar `geom_line()`.
+
+```r
+retornos_acum_activos %&gt;% 
+     ggplot(mapping = aes(x = date, y = ret.cum/100, color = symbol)) +
+     geom_line() + 
+     labs(title = "Retornos Activos", 
+          subtitle = "Oracle (ORCL), Intel (IT), Nvidia (NVDA) y Netflix (NFLX)",
+          x = "Periodo", y = "Retorno Acumulado") + 
+     theme_tq() +
+     scale_fill_tq() + 
+     facet_wrap(~ symbol, ncol = 2) + 
+     guides(color = guide_legend(title="Activos:")) + 
+     scale_y_continuous(labels = scales::percent)
+```
+
+---
+
+&lt;img src="index_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class: center, inverse, middle
+# Análisis Técnico 
+
+---
+
+# ¿Qué es el análisis técnico?
+
+1. El análisis técnico consiste en detectar determinados patrones de comportamiento de los precios en el pasado, con la esperanza de que dicho patrones vuelvan a repetirse y poder así aprovecharnos de ello.
+
+2. Las bases provienen de la **Teoría de Dow**.
+
+3. En esta sesiones veremos los *Bar Chart*, *Candlestick Chart* y las *Bandas de Bollinger*.
+
+---
+# Bar Chart
+
+Este gráfico es llamado OHLC charts, por Open-High-Low-Close. Si el precio de cierre es mayor que el de apertura es un "up day", caso contrario es un "down day". Se recomienda verlo en un periodo del tiempo, en nuestro caso los últimos 6 semanas.
+
+
+```r
+end &lt;- as_date("2018-07-31")
+```
+
+Luego 
+
+```r
+sp500_precio %&gt;%
+    ggplot(aes(x = date, y = close)) +
+    geom_barchart(aes(open = open, high = high, low = low, close = close),
+                  color_up = "darkgreen", color_down = "darkred", size = 1) +
+    labs(title = "S&amp;P 500 Bar Chart", 
+         subtitle = "Con un zoom 6 semanas",
+         y = "Precio de Cierre", x = "") + 
+    coord_x_date(xlim = c(end - weeks(6), end),
+                 ylim = c(2500, 3000)) + 
+    theme_tq()
+```
+
+--- 
+
+
+```r
+sp500_precio %&gt;%
+    ggplot(aes(x = date, y = close)) +
+    geom_barchart(aes(open = open, high = high, low = low, close = close),
+                  color_up = "darkgreen", color_down = "darkred", size = 1) +
+    labs(title = "S&amp;P 500 Bar Chart", 
+         subtitle = "Con un zoom 6 semanas",
+         y = "Precio de Cierre", x = "") + 
+    coord_x_date(xlim = c(end - weeks(6), end),
+                 ylim = c(2500, 3000)) + 
+    theme_tq()
+```
+
+```
+## Warning: Ignoring unknown parameters: colour_up, colour_down
+
+## Warning: Ignoring unknown parameters: colour_up, colour_down
+
+## Warning: Ignoring unknown parameters: colour_up, colour_down
+```
+
+```
+## Warning: Computation failed in `stat_linerange_bc()`:
+## Evaluation error: el argumento "color_up" está ausente, sin valor por omisión.
+```
+
+```
+## Warning: Computation failed in `stat_segment_left_bc()`:
+## Evaluation error: el argumento "color_up" está ausente, sin valor por omisión.
+```
+
+```
+## Warning: Computation failed in `stat_segment_right_bc()`:
+## Evaluation error: el argumento "color_up" está ausente, sin valor por omisión.
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Candlestick Chart
+
+Un candlestick chart es otra forma de representar OHLC. Lo importante es que cuando es "up day" es **bullish** "down day" es **bearish**.
+
+```r
+sp500_precio %&gt;%
+     ggplot(aes(x = date, y = close)) +
+     geom_candlestick(aes(open = open, high = high, low = low, close = close),
+                      color_up = "darkgreen", color_down = "darkred", 
+                      fill_up  = "darkgreen", fill_down  = "darkred") +
+     labs(title = "S&amp;P 500 Candlestick Chart", 
+          subtitle = "Con un zoom 6 semanas",
+          y = "Precio de Cierre", x = "") + 
+     coord_x_date(xlim = c(end - weeks(6), end),
+                  ylim = c(2500, 3000)) + 
+     theme_tq()
+```
+
+---
+
+
+```r
+sp500_precio %&gt;%
+     ggplot(aes(x = date, y = close)) +
+     geom_candlestick(aes(open = open, high = high, low = low, close = close),
+                      color_up = "darkgreen", color_down = "darkred", 
+                      fill_up  = "darkgreen", fill_down  = "darkred") +
+     labs(title = "S&amp;P 500 Candlestick Chart", 
+          subtitle = "Con un zoom 6 semanas",
+          y = "Precio de Cierre", x = "") + 
+     coord_x_date(xlim = c(end - weeks(6), end),
+                  ylim = c(2500, 3000)) + 
+     theme_tq()
+```
+
+```
+## Warning: Ignoring unknown parameters: colour_up, colour_down
+
+## Warning: Ignoring unknown parameters: colour_up, colour_down
+```
+
+```
+## Warning: Computation failed in `stat_linerange_bc()`:
+## Evaluation error: el argumento "color_up" está ausente, sin valor por omisión.
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Bandas de Bollinger 
+
+El análisis Técnico se divide en cuatro tipo: Tendencia (*Trend*), Volatilidad (*Volatility*), Momentum (*Momentum*) y Volumen (*Volume*).
+Uno de los más utilizados son las bandas de Bollinger, las que son formadas por tres líneas.
+
+- La línea central (*Middle Line*, ML) es una media móvil simple.
+
+`\(SMA  = \frac{P_{M} + P_{M-1} + ... + P_{M - (n-1)}}{n} = ML\)`
+
+- La línea superior (*Top Line*, TL) es la misma línea central pero desplazada hacia arriba a un número determinado de desviaciones estándares (D).
+
+`\(TL = ML + (D * \sigma)\)`
+
+- La línea inferior (*Bottom Line*, BL) es la línea central desplazada hacia abajo al mismo número de desviaciones estándares.
+
+`\(BL = ML - (D * \sigma)\)`
+
+---
+# Bandas de Bollinger con quantmod
+
+Realizar las Bandas no es difícil:
+```r
+# Bandas de Bollinger 
+chartSeries(GSPC, subset = "last 3 months")
+addBBands()
+```
+
+`addBBands` tiene las siguientes opciones 
+```r
+addBBands(n = 20, sd = 2, ma= "SMA", draw = "bands", on = -1)
+```
+
+Donde `n` es el numero de periodo de la media movil, `sd` las desviaciones estandar y `ma` el tipo de media movil.
+
+---
+# Otros tipos de Análísis en quantmod
+
+**Tendencia**:
+
+|     INDICATOR                                  |	TTR NAME |	QUANTMOD NAME |
+|------------------------------------------------|:---------:|:--------------:|
+|Welles Wilder`s Directional Movement Indicator  |  	ADX    | addADX         | 
+|Double Exponential Moving Average               |	DEMA     | addDEMA        |
+|Exponential Moving Average	                     | EMA	     | addEMA         |
+|Simple Moving Average	                         | SMA	     | addSMA         |
+|Parabolic Stop and Reverse	                     | SAR       | addSAR         |
+|Exponential Volume Weighted Moving Average      |	EVWMA    | addEVWMA       |
+|Moving Average Convergence Divergence	         | MACD      | addMACD        |
+|Triple Smoothed Exponential Oscillator	         | TRIX      | addTRIX        |
+|Weighted Moving Average	                       | WMA	     | addWMA         |
+|ZLEMA	                                         | ZLEMA     |addZLEMA        |
+
+---
+
+**Volatility**:
+
+|INDICATOR          | TTR NAME	| QUANTMOD NAME |
+|-------------------|:---------:|:-------------:|
+|Average True Range	| ATR       |	addATR        |
+|Bollinger Bands	  | BBands    |	addBBands     |
+|Price Envelope     |	N/A	      | addEnvelope   |
+
+**Volume**:
+
+|INDICATOR	        |TTR NAME	  | QUANTMOD NAME |
+|:-----------------:|:---------:|:-------------:|
+|Chaiken Money Flow	|CMF	      | addCMF        |
+|Volume	            |N/A        |	addVo         |
+
+---
+
+**Momentum**:
+
+|INDICATOR	                | TTR NAME	| QUANTMOD NAME|
+|---------------------------|:---------:|:------------:|
+|Commodity Channel Index    |	CCI       |	addCCI       |
+|Chande Momentum Oscillator |	CMO	      | addCMO       |
+|Detrended Price Oscillator	| DPO	      | addDPO       |
+|momentum	                  |addMomentum|              |
+|Rate of Change	            | ROC	      | addROC       |
+|Relative Strength Indicator|	RSI       |	addRSI       |
+|Stocastic Momentum Index	  | SMI	      | addSMI       |
+|Williams %R	              | WPR	      | addWPR       |
+
+---
+
+# Bandas de Bollinger con tidyquant
+
+La librería `tidyquant` tiene el layer que puede ser usada en `ggplot2` al igual que: `geom_candlestick()`, `geom_barchart()` y `geom_bbands()`
+
+
+```r
+end &lt;- as_date("2018-07-31")
+```
+
+
+```r
+sp500_precio %&gt;% 
+  ggplot(aes(x=date, y=close, open = open,
+             high = high, low = low, close = close)) +
+  geom_candlestick() +
+  geom_bbands(ma_fun = SMA, sd = 2, n = 20) +
+  labs(title = "Standard &amp; Poor 500 Candlestick Chart", 
+       subtitle = "BBands con SMA", 
+       y = "Precio de Cierre", x = "") + 
+  coord_x_date(xlim = c(end - weeks(12), end),
+               ylim = c(2500, 3000)) + 
+  theme_tq()
+```
+
+---
+
+
+```r
+sp500_precio %&gt;% 
+  ggplot(aes(x=date, y=close, open = open,
+             high = high, low = low, close = close)) +
+  geom_candlestick() +
+  geom_bbands(ma_fun = SMA, sd = 2, n = 20) +
+  labs(title = "Standard &amp; Poor 500 Candlestick Chart", 
+       subtitle = "BBands con SMA, últimos 6 meses", 
+       y = "Precio de Cierre", x = "") + 
+  coord_x_date(xlim = c(end - weeks(12), end),
+               ylim = c(2500, 3000)) + 
+  theme_tq()
+```
+
+```
+## Warning: Ignoring unknown parameters: colour_up, colour_down
+
+## Warning: Ignoring unknown parameters: colour_up, colour_down
+```
+
+```
+## Warning: Computation failed in `stat_linerange_bc()`:
+## Evaluation error: el argumento "color_up" está ausente, sin valor por omisión.
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
