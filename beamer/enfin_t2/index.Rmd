@@ -16,7 +16,7 @@ ubication: "Facultad de Economía & Negocios, Universidad de Chile"
 
 output: 
   beamer_presentation:
-    theme: "AnnArbor"
+    theme: "Boadilla" # AnnArbor
     colortheme: "dolphin"
     # fonttheme: "structurebold"
     template: template_beamer.tex

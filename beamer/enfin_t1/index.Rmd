@@ -1,6 +1,6 @@
 ---
-title: "Teoría de portafolio"
-subtitle: "Usando R"
+title: "Introducción a quantmod"
+subtitle: "Aplicaciones y usos en R"
 author: "Gabriel Cabrera G."
 date: '`r glue::glue(lubridate::day(Sys.Date())," de ", paste(toupper(substring(months(Sys.Date()), 1,1)), substring(months(Sys.Date()), 2), sep="", collapse=" "), " del ", lubridate::year(Sys.Date()))`'
 righlogo: "logo-u-de-chile.png"
@@ -16,8 +16,8 @@ ubication: "Facultad de Economía & Negocios, Universidad de Chile"
 
 output: 
   beamer_presentation:
-    theme: "AnnArbor"
-    colortheme: "dolphin"
+    theme: "Boadilla" # AnnArbor
+    colortheme: "dolphin" 
     # fonttheme: "structurebold"
     template: template_beamer.tex
     slide_level: 2
@@ -35,593 +35,223 @@ classoption: "aspectratio=169"
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-# Descargando la librería IntroCompFinR
+# Introducción a Quantmod
 
-## Librería IntroCompFinR
+## ¿Qué es **Quantmod**?
 
-Para la teoría de portfolio vamos a utilzar la librería IntroCompFinR (**Intro** to **Comp**utational **Fin**ance in **R**) creado por el profesor Eric Zivot [@zivot2013chapter]. 
+1. Es un \red{paquete} diseñado para desarrollar, testear e implementar modelos estadísticos financieros.
+2. A través de la función `getsymbols` podemos extraer datos financieros desde varias fuentes: Google Finance, Yahoo Finance, Federal Reserve Bank of St. Louis FRED (más de 11,000 series !!!) y Oanda. Incluso desde fuentes propias: MySQL , R (Rdata) y Comma Separated      Value files (csv).
+3. Tiene herramientas para realizar \red{análisis técnico}.
+4. Con `chartSeries` se puede graficar, al más puro estilo de los terminales de Bloomberg y/o Reuters, genial no. No obstante... nunca está   demás `ggplot2` o `plotly` (Tufte’s Principles) [@wickham2014tidy].
 
-1. Debemos instalar primero las librerías que utiliza IntroCompFinR:
+
+# Manos a la Obra: Obtención de Datos
+
+## Comencemos: Preambulo
+
+Como todo \red{paquete} se debe instalar:
+
+```r
+# Instalación package
+install.packages("quantmod")
+```
+
+y posteriormente lo agregamos a nuestro \red{script}:
+
+```{r, echo=TRUE, message=FALSE}
+# Cargamos "quantmod"
+library("quantmod")
+```
+
+\begin{block}{HINT}
+Con ctrl + R en windows/linux y cmd + R en MAC OS agregamos más rapido comentarios (sección) en Rstudio.
+\end{block}
+
+## Función *getSymbols*
+
+La función se compone principalmente de 5 elementos:
+
+- Nombre del la serie (ticker o nemotecnico).
+- Fuente/source (`src`), e.g: `src="google"`, `src="yahoo"`, `src="FRED"`
+- Inicio de la serie (`from`), e.g: `as.Date("1990-01-01")`.  
+- Fin de la serie (`to`), e.g: `as.Date("1990-01-01")`.
+- periodicity, esta puede ser daily, monthly o yearly.
 
 ```r 
-if(!require("pacman")) install.packages("pacman")
-p_load("PerformanceAnalytics","quadprog","xts")
+# Estructura de la función getSymbols
+getSymbols(" ", src = , from = as.Date(" "), to = as.Date(" "), periodicity = )
 ```
-2. Ya instaladas las dependencias, descargamos IntroCompFinR :
+
+## Obtención de Datos
+
+A continuación obtendremos los datos del S&P 500 (\red{Standard \& Poor 500}), aquí necesitamos saber el \red{ticker} o nemotécnico de la acción (\red{stock}) que vamos a trabajar, para *Yahoo* es \red{\^{}GSPC}. Si se desea buscar otra acción basta con ir a  <https://finance.yahoo.com> y extraerlo.
+
+```{r, echo=TRUE, message=FALSE}
+getSymbols("^GSPC", src = "yahoo", from = "2010-01-01", to = "2018-07-30", periodicity = "daily")
+```
+
+## ¿Como son los datos?
 
 ```r 
-install.packages("IntroCompFinR", repos="http://R-Forge.R-project.org")
+# Primera 1 observaciones con las 5 primeras columnas
+head(GSPC[,1:5],5)
 ```
 
-##
-
-3. Otra opción es simplemente cargar las funciones, sin necesidad de instalar y cargar la librería. 
-Estas quedarán en el *Global Environment*.
-
-```r 
-source(IntroComFinR/IntroComFinR.R)
+```{r head, echo=FALSE}
+# Primera 1 observaciones con las 5 primeras columnas
+knitr::kable(head(GSPC[,1:5],5))
 ```
 
-##
+# Gráficos usando Quantmod 
 
-A veces debemos instalar (`install.packages()`) muchas librerías y luego cargarlas (`library()`), esto puede ser muy invasivo y genera lineas de código innecesarias, una solución es usar la librería **pacman** (**Pac**kage **Man**agement)
+## Función chartSeries
 
-| Función Pacman   | Paquete equivalente          | Descripción                           |
-| ---------------- |:----------------------------:| -------------------------------------:|
-| p_load           | install.packages + library   | Carga e instala los paquetes          |
-| p_install        | install.packages             | Instala paquetes desde CRAN           |
-| p_load_gh        | ninguno                      | Carga e instala del github            |
-
-Existen más opciones, pero no serán necesarias para la sesión. Con la función `p_load` agregan^[Deben escribir antes \tiny `if(!require("pacman")) install.packages("pacman")`] todos las librerías que deseen, si las tienen las carga (`library()`), si no, las instala (`install.packages()`) y luego las carga.
-
-## Funciones útiles de IntroCompFinR 
-
- Funciones           | Descripciones                                                |
-|---------------------|--------------------------------------------------------------|
-| getPortfolio        | Crea un portafolio (objeto)                                  |
-| globalMin.portfolio | Computa el portafolio de mímina varianza                     |
-| efficient.portfolio | Computa el portafolio de mímina varianza sujeto a un retorno |
-| tangency.portfolio  | Computa el portafolio tangente                               |
-| efficient.frontier  | Computa la frontera eficiente                                |
-
-# Utilizando IntroCompFinR
-
-## Cargando la librería y la base de datos
-
-Una vez la instalada la librería, procedemos a cargarla en conjunto con aquellas que utilizaremos en esta ayudantía:
-
-```{r chunk3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
-if(!require("pacman")) install.packages("pacman")
-p_load("IntroCompFinR","readxl","tidyverse")
+```{r chartseries, echo = TRUE, fig.width = 5.5, fig.asp = .35 , fig.align = "center"}
+# Graficamos usando chartSeries sin análisis técnico 
+chartSeries(GSPC, TA=NULL)
 ```
 
-Como ya está cargado `readxl` cargamos el archivo **stocks.xlsx**, que ya posee los retornos^[si quieren replicarlo vean los videos].
+## Función chartSeries
 
-```{r}
-# acá están los retornos ya calculados, para replicarlos vean el apunte
-stocks <- read_xlsx("stocks.xlsx")
+Como se ve, en el eje de las x muestra el periodo y en el eje de las ordenadas el precio. La opción `TA` implica que no hay ningún análisis técnico. sin `TA` aparecen el volumen.
+
+```r
+# Graficamos usando chartSeries con volume
+chartSeries(GSPC)
+```
+Pero cuando las series son muy largas, podemos ver tendencias pero dificulta ver cambios importantes a nivel de análisis técnico.
+
+```r
+# Graficando S&P 500 con Valume y los tres últimos meses
+chartSeries(GSPC, subset = "last 3 months")
+```
+Con el código anterior nos enfocamos solo en los tres meses anteriores.
+
+## Gráfico con ggplot2
+
+Debemos cargar ggplot2, pero para esto usamos \red{tidyverse}.
+
+```{r, message=FALSE, echo=TRUE}
+library("tidyverse")
 ```
 
+luego graficamos:
 
-## Portafolio con tres activos riesgosos
-
-Considerando tres activos riesgosos (Starbucks, Nordstrom y Microsoft), definimos un vector columna $3x1$ el que tendrá los retornos y los pesos:
-
-$$
-\mathbf{R} = 
-\begin{pmatrix}
-    R_{a}  \\
-    R_{b}  \\
-    R_{c} 
-\end{pmatrix}
-,
-\mathbf{x} =
-\begin{pmatrix}
-    x_{a} \\
-    x_{b} \\
-    x_{c}
-\end{pmatrix}
-$$
-El vector de retornos esperados es:
-
-$$
-E[\mathbf{R}] = E 
-\begin{bmatrix} 
-\begin{pmatrix}
-    R_{a}  \\
-    R_{b}  \\
-    R_{c} 
-\end{pmatrix}
-\end{bmatrix}
-    = 
-\begin{pmatrix}
-  E[R_{a}]  \\
-  E[R_{b}]  \\
-  E[R_{c}] 
-\end{pmatrix}
-    =
-\begin{pmatrix}
-    \mu_{a}  \\
-    \mu_{b}  \\
-    \mu_{c} 
-\end{pmatrix}
-    =
-\mathbf{\mu}
-$$
-
-##
-
-La matriz $3x3$ de varianza y covarianza de los retornos es:
-
-$$
-var[\mathbf{R}] = 
-\begin{pmatrix}
-    \sigma^2_{a} & \sigma_{ab}  & \sigma_{ac} \\
-    \sigma_{ab}  & \sigma^2_{b} & \sigma_{bc} \\
-    \sigma_{ac}  & \sigma_{bc}  &  \sigma^2_{c}  
-\end{pmatrix}
-    =
-\Sigma
-$$
-
-Notar que la matriz de covarianza  es simétrica ($\Sigma = \Sigma^{'}$).
-
-Para construir las matrices anteriores en R:
-
-```{r chunk4, echo=TRUE, eval=TRUE, message=FALSE}
-# Promedio
-mean <- apply(stocks[2:4], 2 , function(x) mean(x)) 
-# Desviación Estandar
-sd   <- apply(stocks[2:4], 2 , function(x) sd(x))
-# Covarianza
-cov  <- cov(stocks[2:4])   
+```r
+# Usando ggplot2 
+g1 <- ggplot(gspc) + geom_line(mapping = aes(index(gspc),GSPC.Adjusted))
+g1 <- g1 + labs(title = "S&P 500", subtitle = "Desde Enero 2010 a 2018") + xlab("Fecha") + ylab("")
+g1 <- g1 + theme_bw()
+g1 
 ```
 
+¿Observan algo que está mal?
 
-## Graficando Trade-off retorno-riesgo
+# Trabajando con múltiples datos
 
-A continuación graficamos el trade-off retorno riesgo de cada activo riesgoso:
+## Oracle, Nvidia, IBM y AMD {.allowframebreaks}
 
-```r 
-# graficamos el trade-off riesgo-retorno
-g1 <- ggplot(mapping = aes(sd, mean, label = c("NODS","SBUX","MSFT"))) + geom_point() 
-g1 <- g1 + geom_text(hjust = 0, vjust = 0)
-g1 <- g1 + scale_y_continuous(breaks = seq(0,0.2, by = 0.01),limits = c(0,0.08))
-g1 <- g1 + scale_x_continuous(breaks = seq(0,0.2, by = 0.02),limits = c(0,0.2))
-g1 <- g1 + theme_bw() + xlab("Riesgo") + ylab("Retorno")
-g1 <- g1 + ggtitle("Trade-off Riesgo-Retorno",subtitle = "Tres activos riesgosos") 
-g1
-```
-
-## 
-
-```{r chunk5, echo=FALSE, eval=TRUE, message=FALSE, fig.align='center', fig.height=3, fig.width=6}
-# graficamos el trade-off riesgo-retorno
-g1 <- ggplot(mapping = aes(sd, mean, label = c("NODS","SBUX","MSFT"))) + geom_point() + geom_text(hjust = 0, vjust = 0)
-g1 <- g1 + scale_y_continuous(breaks = seq(0,0.2, by = 0.01),limits = c(0,0.08)) + scale_x_continuous(breaks = seq(0,0.2, by = 0.02),limits = c(0,0.2))
-g1 <- g1 + theme_bw() + xlab("Riesgo") + ylab("Retorno") +  ggtitle("Trade-off Riesgo-Retorno",subtitle = "Tres activos riesgosos")
-g1   
-```
-
-
-## Construcción portafolio con pesos iguales
-
-El retorno de un portafolio usando notación matricial es:
-$$
-\mathbf{R_{p,x}} = \mathbf{x}^{'}\mathbf{R} = (x_a,x_b,x_c)\cdot\begin{pmatrix}
-R_a \\
-R_b \\
-R_c
-\end{pmatrix}
-=
-x_aR_a + x_bR_b + x_cR_c 
-$$
-
-La varianza del portafolio es:
-
-$$
-\mathbf{\sigma^{2}_{p,x}} = var(\mathbf{x'}R) = \mathbf{x'}\Sigma \mathbf{x'} = (x_a,x_b,x_c)\begin{pmatrix}
-    \sigma^2_{a} & \sigma_{ab}  & \sigma_{ac} \\
-    \sigma_{ab}  & \sigma^2_{b} & \sigma_{bc} \\
-    \sigma_{ac}  & \sigma_{bc}  &  \sigma^2_{c}  
-\end{pmatrix}
-\begin{pmatrix}
-    x_{a}  \\
-    x_{b}   \\
-    x_{c}  
-\end{pmatrix}
-$$
-
-##
-
-```{r chunk6, echo=TRUE, eval=TRUE, message=FALSE}
-# construimos los pesos 
-weights <- rep(1,3)/3
-
-# construimos el portfolio
-getPortfolio(mean, cov, weights)
-``` 
-
-# Portafolio de Mínima Varianza
-
-## Calculando Portafolio de Mínima Varianza
-
-El portafolio de mínima varianza $\mathbf{m} = (m_a,m_b,m_c)'$ para tres activos puede ser resuelto:
-
-$$
-\begin{aligned}
-\min_{m_a,m_b,m_c}  \sigma^2_{p,m} &= m^2_{a}\sigma^2_{a} + m^2_{b}\sigma^2_{b} + m^2_{c}\sigma^2_{c} + 2m_am_b\sigma^2_{ab} + 2m_am_c\sigma^2_{ac} + 2m_bm_c\sigma^2_{bc} \\
-\textrm{s.t.} & \quad m_a + m_b + m_c = 1  
-\end{aligned}
-$$
-
-Usando la manera matricial se puede expresar como:
-
-$$
-\begin{aligned}
-\min_{m}  \sigma^2_{p,m} &= \mathbf{m'}\Sigma \mathbf{m} \quad  \textrm{s.t.} \quad \mathbf{m'1} = 1
-\end{aligned}
-$$
-
-## Calculando Portafolio de Mínima Varianza Código 
-
-```{r, echo=TRUE, eval=TRUE}
-# construimos el objeto
-globalmin <- globalMin.portfolio(mean, cov, shorts = TRUE)
-
-# vemos el objeto en la consola 
-globalmin 
-```
-
-
-## Graficando Portafolio de Mínima Varianza 
-
-A continuación se grafica el portafolio de mínima varianza
-
-```r 
-g2 <- ggplot() + geom_point(mapping = aes(globalmin$sd, globalmin$er, color = "1"))
-g2 <- g2 + geom_point(mapping = aes(sd, mean, color = "2")) 
-g2 <- g2 + scale_y_continuous(breaks = seq(0,0.2, by = 0.01),limits = c(0,0.06))
-g2 <- g2 + scale_x_continuous(breaks = seq(0,0.2, by = 0.02),limits = c(0,0.2)) 
-g2 <- g2 + scale_color_manual("", values = c("green", "red"), labels = c("Min Var.", "Stocks 1"))
-g2 <- g2 + theme_bw() + xlab("Riesgo") + ylab("Retorno")
-g2 <- g2 + ggtitle("Trade-off Riesgo-Retorno", 
-                   subtitle = "Tres activos riesgosos & minima varianza")
-g2
-```
-
-## 
-
-```{r, echo=FALSE, eval=TRUE, message=FALSE, fig.align='center', fig.height=3, fig.width=6}
-g2 <- ggplot() + geom_point(mapping = aes(globalmin$sd, globalmin$er, color = "1"))
-g2 <- g2 + geom_point(mapping = aes(sd, mean, color = "2")) 
-g2 <- g2 + scale_y_continuous(breaks = seq(0,0.2, by = 0.01),limits = c(0,0.06))
-g2 <- g2 + scale_x_continuous(breaks = seq(0,0.2, by = 0.02),limits = c(0,0.2)) 
-g2 <- g2 + scale_color_manual("", values = c("green", "red"), labels = c("Min Var.", 
-                                                                         "Stocks 1"))
-g2 <- g2 + theme_bw() + xlab("Riesgo") + ylab("Retorno")
-g2 <- g2 + ggtitle("Trade-off Riesgo-Retorno", 
-                   subtitle = "Tres activos riesgosos & minima varianza")
-g2
-```
-
-# Portfolio de minima varianza sujeto a un retorno objetivo
-
-## Calculando portfolio de minima varianza sujeto a un retorno objetivo 
-
-Sea $\sigma^2_{p,0}$ el nivel de riesgo, el problema de maximización es acotado a: 
-
-$$ 
-\begin{aligned}
-\max_{x}  \mu_p &= \mathbf{x'\mu} \\
-\textrm{s.t.} \quad \sigma^2_{p} &= \mathbf{x'}\Sigma\mathbf{x} = \sigma^2_{p,0} \quad y \quad \mathbf{x'1} = 1
-\end{aligned}
-$$
-El problema dual para la minimización:
-
-$$ 
-\begin{aligned}
-\min_{x} \sigma^2_{p,x} &= \mathbf{x'}\Sigma\mathbf{x} \\
-\textrm{s.t.} \quad \mu_p  &= \mathbf{x'\mu}  = \mu_{p,0} \quad y \quad \mathbf{x'1} = 1
-\end{aligned}
-$$
-
-## 
+A continuación trabajaremos con las acciones de Oracle, Nvidia, IBM y AMD, comenzamos con crear un objeto con los nombres de los tickers
 
 ```{r, eval=TRUE, echo=TRUE}
-# retorno igual a Nordstrom
-port.nods <- efficient.portfolio(mean, cov, mean[1], shorts = TRUE)
-
-# retorno igual a Starbucks
-port.sbux <- efficient.portfolio(mean, cov, mean[2], shorts = TRUE)
-
-# retorno igual a Microsoft
-port.msft <- efficient.portfolio(mean, cov, mean[3], shorts = TRUE)
-
-# construimos objeto con los retornos y desviaciones estandar
-mean.2 <- c(port.nods$er, port.sbux$er, port.msft$er)
-sd.2 <- c(port.nods$sd, port.sbux$sd, port.msft$sd)
+# Nuevos tickers
+tickers <- c("ORCL","AMD","IBM","NVDA")
 ```
 
-## Graficando Portafolio de Mínima Varianza sujeto a un retorno objetivo 
+descargamos los datos con las características requeridas, que son las mismas que usamos anteriormente con S&P 500
+```r
+# descargamos los tickers
+getSymbols(tickers, src = "yahoo", from = "2010-01-01", to = "2018-07-30", periodicity = "daily")
+```
 
-A continuación se grafican los portafolios eficientes
+Acá deben tener mucha atención [@wickham2014advanced]:
 
 ```r
-g3 <- ggplot() + geom_point(mapping = aes(sd, mean, color = "1")) 
-g3 <- g3 + geom_point(mapping = aes(sd.2, mean.2, color = "2")) 
-g3 <- g3 + geom_point(mapping = aes(globalmin$sd, globalmin$er, color = "3"))
-g3 <- g3 + scale_y_continuous(breaks = seq(0,0.2, by = 0.01),limits = c(0,0.06))
-g3 <- g3 + scale_x_continuous(breaks = seq(0,0.2, by = 0.02),limits = c(0,0.2)) 
-g3 <- g3 + scale_color_manual("", values = c("blue", "red", "green"), 
-                              labels = c("Stocks 1", "Stocks 2", "Min var."))
-g3 <- g3 + theme_bw() + xlab("Riesgo") + ylab("Retorno")
-g3 <- g3 + ggtitle("Trade-off Riesgo-Retorno", 
-                   subtitle = "Tres activos riesgosos & minima varianza")
+# Precio de cierre
+list <- lapply(tickers, function(x) Cl(get(x)))
+precio.cierre <- do.call(merge,list)
+```
+
+## Cálculo de los retornos {.allowframebreaks}
+
+La ecuación \eqref{eq:eq1} es la utilizada para calcular (log) retornos:
+
+\begin{equation}
+\label{eq:eq1}
+r_t = log(1 + R_t) = log(\frac{P_t}{P_{t-1}}) = p_t - p_{t-1}
+\end{equation} 
+
+donde $p_t = log(P_t)$ es llamado "log price" [@ruppert2011statistics].
+
+A veces nos puede molestar tener tanta objetos que no vamos a utilizar:
+
+```r
+# removemos los objetos que no vamos a usar
+rm(tickers, AMD, IBM, NVDA, ORCL, list)
+```
+Ahora pasamos a construir el retorno
+```r
+# calculamos los  retornos
+retornos <- data.frame(apply(precio.cierre, 2, function(x) Delt(x, type = "log")),
+                       fecha = index(precio.cierre)) %>%
+            rename(orcl = ORCL.Close, amd = AMD.Close, ibm = IBM.Close, nvda = NVDA.Close) %>% 
+            na.omit() 
+```
+## Cálculo de los retornos acumulados 
+
+Si graficamos los retornos no será muy descriptivo, una forma es trabajar con su acumulado. Con la misma lógica usamos la función `cumsum()`. 
+
+```r
+# calculamos los retornos acumulados
+acumulados <- data.frame(apply(retornos[1:4], 2, function(x) cumsum(x)), fecha = index(precio.cierre[-1]))
+```
+
+## Gráfico retornos acumulados
+
+La librería ggplot2 trabaja por "capas":
+
+1. Base de datos
+2. Tipo de gráfico: geom_line, geom_point, entre otros.
+3. Todo lo extra, que sería título, subtítulo, nombre de los ejes, etc.
+
+```r
+# Cambiamos la forma de los datos
+reshape <- melt(acumulados, id.vars = "fecha")
+```
+
+```r
+# graficamos los retornos acumulados forma 2
+g3 <- ggplot(reshape) + geom_line(mapping = aes(fecha,value, color = variable))
+g3 <- g3 + labs(title = "Retornos Acumulados", subtitle = "Oracle, AMD, IBM y Nvidia")
+g3 <- g3 + theme_bw() + xlab("Fecha") + ylab("Retornos Acumulados")
+g3 <- g3 + scale_color_manual("Tickers", values = c("red","red","green","orange"))
+g3 <- g3 + theme(legend.position = "bottom")
 g3
 ```
 
-##
+# Estadística Descriptiva
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, fig.align='center', fig.height=3, fig.width=6 }
-g3 <- ggplot() + geom_point(mapping = aes(sd, mean, color = "1")) 
-g3 <- g3 + geom_point(mapping = aes(sd.2, mean.2, color = "2")) 
-g3 <- g3 + geom_point(mapping = aes(globalmin$sd, globalmin$er, color = "3"))
-g3 <- g3 + scale_y_continuous(breaks = seq(0,0.2, by = 0.01),limits = c(0,0.06))
-g3 <- g3 + scale_x_continuous(breaks = seq(0,0.2, by = 0.02),limits = c(0,0.2)) 
-g3 <- g3 + scale_color_manual("", values = c("blue", "red", "green"), 
-                              labels = c("Stocks 1", "Stocks 2", "Min var."))
-g3 <- g3 + theme_bw() + xlab("Riesgo") + ylab("Retorno")
-g3 <- g3 + ggtitle("Trade-off Riesgo-Retorno", 
-                   subtitle = "Tres activos riesgosos & minima varianza")
-g3
-```
+## Estadística Descriptiva
 
-
-# Portafolio tangente 
-
-## Cálculo Portafolio tangente 
-
-
-El portafolio tangente es el portafolio de activos riesgosos que tiene el mayor ratio de sharpe. El portafolio tangente (pesos), denominado $\mathbf{t} = (t_{aapl},t_{msft},t_{nvda})'$ resuelve:
-
-$$
-\begin{aligned}
-\max_{\mathbf{t}} \quad \frac{\mathbf{t'\mu} - r_f}{(\mathbf{t'}\Sigma\mathbf{t})^{1/2}} &= \frac{\mu_{p,t}-r_f}{\sigma_{p,t}}   \\
-\textrm{s.t.} \quad \mathbf{t'1} & = 1
-\end{aligned}
-$$
-
-resolviendo:
-
-$$
-\mathbf{t} = \frac{\Sigma^{-1}(\mathbf{\mu} - rf \cdot \mathbf{1})}{\mathbf{1'}\Sigma^{-1}(\mathbf{\mu} - rf \cdot \mathbf{1})}
-$$
-
-El caso usual es cuando el ratio de sharpe es positivo, $\mu_{p,m} > r_f$.
-
-##
-
-Fijamos una tasa libre de riesgo
-
-```{r, eval = TRUE, echo = TRUE}
-# Tasa libre de riesgo
-risk_free <- 0.005
-```
-
-Procedemos a calcular el portafolio tangente:
-
-```{r, eval = TRUE, echo = TRUE}
-# Portafolio tangente 
-port.tang <- tangency.portfolio(mean, cov, risk_free, shorts = TRUE)
-```
-
-Finalmente el ratio de sharpe:
-
-```{r, eval = TRUE, echo = TRUE}
-#sharpe ratio 
-sharpe.ratio <- (port.tang$er - risk_free)/port.tang$sd
-```
-
-
-## Graficando calculo portafolio tangente 
-
-
-A continuación se grafica el portafolio eficiente:
+Existe muchas formas de obtener la estadística descriptiva en R, un librería es `fBasics`, la que a su vez contiene test de normalidad. 
 
 ```r
-g4 <- ggplot() + geom_point(mapping = aes(sd, mean, color = "1"))
-g4 <- g4 + geom_point(mapping = aes(sd.2, mean.2, color = "2")) 
-g4 <- g4 + geom_point(mapping = aes(port.tang$sd, port.tang$er, color = "3")) 
-g4 <- g4 + geom_point(mapping = aes(globalmin$sd, globalmin$er, color = "4"))
-g4 <- g4 + geom_abline(intercept = risk_free, slope = sharpe.ratio) 
-g4 <- g4 + scale_y_continuous(breaks = seq(0,0.2, by = 0.01),limits = c(0,0.06))
-g4 <- g4 + scale_x_continuous(breaks = seq(0,0.2, by = 0.02),limits = c(0,0.2)) 
-g4 <- g4 + scale_color_manual("", values = c("blue", "red", "orange", "green"),
-                              labels = c("Stocks 1",  "Stocks 2", "Tang. Port", "Min var."))
-g4 <- g4 + theme_bw() + xlab("Riesgo") + ylab("Retorno")  
-g4 <- g4 + ggtitle("Trade-off Riesgo-Retorno", 
-                   subtitle = "Tres activos riesgosos & minima varianza")
-g4
+# cargamos la librería fBasics
+library("fBasics")
+
+# construímos un objeto con las estadística descriptiva
+summary <- basicStats(retornos[1:4])[c("Mean", "Stdev", "Median", "Minimum", 
+                                       "Maximum", "nobs","Skewness","Kurtosis"),]
 ```
 
-## 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, fig.align='center', fig.height=3, fig.width=6}
-g4 <- ggplot() + geom_point(mapping = aes(sd, mean, color = "1"))
-g4 <- g4 + geom_point(mapping = aes(sd.2, mean.2, color = "2")) 
-g4 <- g4 + geom_point(mapping = aes(port.tang$sd, port.tang$er, color = "3")) 
-g4 <- g4 + geom_point(mapping = aes(globalmin$sd, globalmin$er, color = "4"))
-g4 <- g4 + geom_abline(intercept = risk_free, slope = sharpe.ratio) 
-g4 <- g4 + scale_y_continuous(breaks = seq(0,0.2, by = 0.01),limits = c(0,0.06))
-g4 <- g4 + scale_x_continuous(breaks = seq(0,0.2, by = 0.02),limits = c(0,0.2)) 
-g4 <- g4 + scale_color_manual("", values = c("blue", "red", "orange", "green"),
-                              labels = c("Stocks 1",  "Stocks 2", "Tang. Port", "Min var."))
-g4 <- g4 + theme_bw() + xlab("Riesgo") + ylab("Retorno")  
-g4 <- g4 + ggtitle("Trade-off Riesgo-Retorno", 
-                   subtitle = "Tres activos riesgosos & minima varianza")
-g4
-```
+## Recursos de la ayudantía: apunte del curso y videos
 
+Este semestre para complementar su camino en aprender R es que podran acceder a un apunte en construcción:
 
-# Frontera eficiente
+- Apunte curso Finanzas I: [https://finance-r.netlify.com/](https://finance-r.netlify.com/)
 
-## Construcción frontera eficiente
+Algunas sesiones tiene incluido videos tutoriales:
 
-Para formar la frontera eficiente (punto) se necesita encontrar dos portafolios eficientes (realizado anteriormente). Sea $\mathbf{x} = (x_a,x_b,x_c)'$ e $\mathbf{x} = (y_a,y_b,y_c)'$ con retornos esperados distintos (*target*) $\mathbf{x'\mu} = \mu_{p,0} \neq \mathbf{y'\mu} = \mu_{p,1}$, donde $\mathbf{x}$ resuelve:
-
-$$
-\begin{aligned}
-\min_{x} \sigma^2_{p,x} &= \mathbf{x'}\Sigma\mathbf{x} \\
-\textrm{s.t.} \quad \mu_p  &= \mathbf{x'\mu}  = \mu_{p,0} \quad y \quad \mathbf{x'1} = 1
-\end{aligned}
-$$
-y el portafolio $\mathbf{y}$:
-
-$$
-\begin{aligned}
-\min_{x} \sigma^2_{p,y} &= \mathbf{y'}\Sigma\mathbf{y} \\
-\textrm{s.t.} \quad \mu_p  &= \mathbf{y'\mu}  = \mu_{p,1} \quad y \quad \mathbf{y'1} = 1
-\end{aligned}
-$$
-
-## 
-
-Sea $\mathbf{\alpha}$ cualquier constante y definiendo el portafolio $\mathbf{z}$ como una combinación lineal de portafolios $\mathbf{x}$ e $\mathbf{y}$.
-
-$$
-\begin{aligned}
-\mathbf{z} &= \mathbf{\alpha \cdot x} + (1 - \alpha) \cdot \mathbf{y}  \\
-           &= \begin{pmatrix}
-\alpha x_a + (1 - \alpha)y_a \\
-\alpha x_b + (1 - \alpha)y_b \\
-\alpha x_c + (1 - \alpha)y_c 
-\end{pmatrix}
-\end{aligned}
-$$
-Entonces:
-
-1. El portafolio $\mathbf{z}$ es un portafolio de minima varianza con retorno esperado y varianza dado por:
-$$
-\begin{aligned}
-\mu_{p,z} &= \mathbf{z'\mu} = \alpha \cdot \mu_{p,x} + (1 - \alpha) \cdot \mu_{p,y} \\
-\sigma^2_{p,z} &= \mathbf{z'}\Sigma\mathbf{z} = \alpha^2 \sigma^2_{p,x} + (1-\alpha)^2 \sigma^2_{p,y} + 2\alpha (1-\alpha)\sigma_{xy}
-\end{aligned}
-$$
-donde 
-$$
-\sigma^2_{p,x} = \mathbf{z'}\Sigma\mathbf{z}, \sigma^2_{p,y} = \mathbf{y'}\Sigma\mathbf{y}, \sigma_{xy} = \mathbf{x'}\Sigma\mathbf{y}
-$$
-
-##
-
-2. Si $\mu_{p,z} \geq \mu_{p,m}$ donde $\mu_{p,m}$ es el retorno esperado del portafolio de mímina varianza, entonces el portafolio $\mathbf{z}$ es un portafolio eficiente
-
-## 
-
-```{r, eval = TRUE, echo = TRUE}
-eff.front.short <- efficient.frontier(mean, cov, nport = 25, alpha.min = -2, 
-                                      alpha.max = 1.5, shorts = TRUE)
-eff.front.short 
-```
-
-## Gráficando frontera eficiente
-
-A continuación se grafican la frontera eficiente con venta corta
-
-```r
-g5 <- ggplot() + geom_point(mapping = aes(eff.front.short$sd, eff.front.short$er, 
-                                          color = "1"))
-g5 <- g5 + geom_point(mapping = aes(sd, mean, color = "2")) 
-g5 <- g5 + geom_point(mapping = aes(sd.2, mean.2, color = "3")) 
-g5 <- g5 + geom_point(mapping = aes(port.tang$sd, port.tang$er, color = "4")) 
-g5 <- g5 + geom_point(mapping = aes(globalmin$sd, globalmin$er, color = "5"))
-g5 <- g5 + geom_abline(intercept = risk_free, slope = sharpe.ratio)
-g5 <- g5 + scale_y_continuous(breaks = seq(0,0.2, by = 0.01), limits = c(0,0.08)) 
-g5 <- g5 + scale_x_continuous(breaks = seq(0,0.2, by = 0.02), limits = c(0,0.2)) 
-g5 <- g5 + scale_color_manual("", values = c("black","blue", "red", "orange", "green"), 
-                              labels = c("Frontera", "Stocks 1", "Stocks 2", 
-                                         "Tang. Port","Min var."))
-g5 <- g5 + theme_bw() + xlab("Riesgo") + ylab("Retorno")
-g5 <- g5 + ggtitle("Trade-off Riesgo-Retorno", 
-                   subtitle = "Tres activos riesgosos & minima varianza")
-g5
-```
-##
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE, fig.align='center', fig.height=3, fig.width=6}
-g5 <- ggplot() + geom_point(mapping = aes(eff.front.short$sd, eff.front.short$er, 
-                                          color = "1"))
-g5 <- g5 + geom_point(mapping = aes(sd, mean, color = "2")) 
-g5 <- g5 + geom_point(mapping = aes(sd.2, mean.2, color = "3")) 
-g5 <- g5 + geom_point(mapping = aes(port.tang$sd, port.tang$er, color = "4")) 
-g5 <- g5 + geom_point(mapping = aes(globalmin$sd, globalmin$er, color = "5"))
-g5 <- g5 + geom_abline(intercept = risk_free, slope = sharpe.ratio)
-g5 <- g5 + scale_y_continuous(breaks = seq(0,0.2, by = 0.01), limits = c(0,0.08)) 
-g5 <- g5 + scale_x_continuous(breaks = seq(0,0.2, by = 0.02), limits = c(0,0.2)) 
-g5 <- g5 + scale_color_manual("", values = c("black","blue", "red", "orange", "green"), 
-                              labels = c("Frontera", "Stocks 1", "Stocks 2", 
-                                         "Tang. Port","Min var."))
-g5 <- g5 + theme_bw() + xlab("Riesgo") + ylab("Retorno")
-g5 <- g5 + ggtitle("Trade-off Riesgo-Retorno", 
-                   subtitle = "Tres activos riesgosos & minima varianza")
-g5
-```
-
-# Medidas de performance 
-
-## Ratio de Sharpe 
-Este ratio representa una medida del exceso de rendimiento por unidad de riesgo de una inversión.
-$$
-\begin{aligned}
-Sharpe= \frac{\mu_{p,t}-r_f}{\sigma_{p,t}}   \\
-\end{aligned}
-$$
-[@sharpe1994sharpe]
-
-## Alpha de Jensen
-[@jensen1968performance]
-Representa el exceso de retorno anormal de un portafolio, de acuerdo a su valor teórico esperado.
-Podemos representar esta medida como:
-$$
-\begin{aligned}
-\alpha _{J}=R_{i}-[R_{f}+\beta _{{iM}}\cdot (R_{M}-R_{f})]
-\end{aligned}
-$$
-Donde $\alpha _{J}$ representa el coeficiente de posición y $\beta _{{iM}}$ el estimador de la siguiente regresión 
-$$
-\begin{aligned}
-R_{i}-R_{f}= \alpha _{J}+\beta _{{iM}}\cdot (R_{M}-R_{f})
-\end{aligned}
-$$
-
-```{r, eval = TRUE, echo = FALSE}
-stocks$mercado=rnorm(59, 0.05, 0.01)
-library(xts)
-library(PerformanceAnalytics)
-stocks1 <- xts(x = stocks, order.by = stocks$Date)
-
-```
-
-```{r, eval = TRUE, echo = TRUE}
-Ra <- stocks1$Nordstrom
-Rb <- stocks1$mercado
-
-CAPM.jensenAlpha(Ra, Rb, Rf = 0.005)
-```
-```{r, eval = TRUE, echo = TRUE}
-modelo=lm(stocks$Nordstrom~stocks$mercado)
-modelo[1]
-```
-## Medida de Treynor
-$$
-\begin{aligned}
-{\displaystyle T={\frac {r_{i}-r_{f}}{\beta _{i}}}}
-
-\end{aligned}
-
-$$
-Donde $r_{i}$ es el rendimiento del portafolio $i$, $r_{f}$ la tasa libre de riesgo y $\beta_{i}$ el beta de la cartera.
-
-```{r, eval = TRUE, echo = TRUE}
-print(TreynorRatio(stocks$Nordstrom, stocks$mercado, Rf = 0.005, scale = NA, modified = FALSE))
-```
+- Parte 1 Introducción a quantmod: https://youtu.be/TwBKLTq3mfY
+- Parte 2 Retornos y retornos acumulados: https://youtu.be/-3RvuhtfNGU
+- Parte 3 Graficar los retornos acumulados y estadística descriptiva: https://youtu.be/qlLFjBMSUlQ
