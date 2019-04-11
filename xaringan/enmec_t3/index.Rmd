@@ -56,8 +56,6 @@ install.packages("tidyquant")
 library("tidyquant")
 ```
 
-
-
 .footnote[
 [1] Para mayor detalle ver el paper "Tidy Data (2014)" de Hadley Wickham.
 ]

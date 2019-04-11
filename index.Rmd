@@ -21,7 +21,7 @@ library(fontawesome)
 |Nª   |Fecha       |Presentación                                                           |Material                                                                                                   |Solución                                                                                              | 
 |:---:|:---:       |:---:                                                                  |:---:                                                                                                      |:---:                                                                                                 |
 |1    |`2019-25-03`|[`r fa("file-powerpoint", fill = "red")`](xaringan/enmec_t1/index.html)|[`r fa("file-archive", fill = "forestgreen")`](https://www.dropbox.com/s/mmil33cylowumkz/material.zip?dl=1)|[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/gjr3cvgphlue3at/solution.zip?dl=1)|
-
+|2    |`2019-15-04`|[`r fa("file-powerpoint", fill = "red")`](xaringan/enmec_t3/index.html)|`r fa("file-archive", fill = "forestgreen")`                                                             )| `r fa("r-project", fill = "steelblue")`                                                              |
 
 ---
 
