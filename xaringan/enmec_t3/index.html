@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
     <title>Tidyquant</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta name="author" content="Gabriel Cabrera   Universidad de Chile      GaboCg      @GaboC_g    gcabrerag@fen.uchile.cl" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/hygge.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/5235085b15.js"></script>
-    <link rel="stylesheet" href="css\my-theme.css" type="text/css" />
-    <link rel="stylesheet" href="css\my-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="css/my-fonts.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -50,6 +51,14 @@ background-position: 97% 5%
 
 3. **tidyquant** integra los mejores recursos/paquetes para colectar y analizar datos financieros: zoo, xts, quantmod, TTR y PerformanceAnalytic, con la infraestructura **tidy data**&lt;sup&gt;1&lt;/sup&gt; del tidyverse, permitiendo la interacción entre ambos.
 
+.question[Instale y descargue `tidyquant`.]
+
+```r
+install.packages("tidyquant")
+library("tidyquant")
+```
+
+
 
 .footnote[
 [1] Para mayor detalle ver el paper "Tidy Data (2014)" de Hadley Wickham.
@@ -59,14 +68,14 @@ background-position: 97% 5%
 
 # Resumen de los paquetes
 
-1. xts o eXtensible time series: Es una estructura de datos y a la vez una librería para manipular series de tiempo. Detras se encuentra la estructura zoo.
+1. **xts** o **eXtensible time series**: Es una estructura de datos y a la vez una librería para manipular series de tiempo. Detras se encuentra la estructura zoo.
 
-2. quantmod o  Quantitative Financial Modelling &amp; Trading Framework: Es una librería diseñada para 
+2. **quantmod** o  **Quantitative Financial Modelling &amp; Trading Framework**: Es una librería diseñada para 
 recuperar, manipular y modelar datos cuantitativos financieros. 
 
-3. TTR o Technical Trading Rules: Paquete que incluye varias funciones para computar análisis técnico.
+3. **TTR** o **Technical Trading Rules**: Paquete que incluye varias funciones para computar análisis técnico.
 
-4. PerformanceAnalytics: Incluye una colección de funciones econométricas para desempeño y análisis de riesgo. Se necesita los retornos y no los precios. 
+4. **PerformanceAnalytics**: Incluye una colección de funciones econométricas para desempeño y análisis de riesgo. Se necesita los retornos y no los precios. 
 
 ---
 class: center, inverse, middle
@@ -76,13 +85,66 @@ class: center, inverse, middle
 ---
 # xts 
 
+En el mundo `xts` debemos considerar:
+
+1. `xts` es un paquete y un tipo de objeto.
+
+2. Contiene series de tiempo, ubicando la fecha en el `index` de cada observación. 
+
+3. Los paquetes cruciales para trabajar en el mundo del `xts` son: `quantmod` y
+`PerformanceAnalytics`. `quantmod` permite acceder a internet y extraer los 
+precios en un objeto `xts`. `PerformanceAnalytics`, contiene funciones útiles
+para analizar el *performance* de portafolios: `StdDev()`, `SharpeRatio()`,
+`SortinoRatio()` y `CAPM.beta()`.
+
+A continuación descargaremos el Standard &amp; Poor´s 500 (`^GSPC`) utilizando
+`quantmod`: 
+
+
+```r
+library("quantmod")
+
+getSymbols("^GSPC",
+           from = "2018-01-01",
+           to = "2018-02-01",
+           periodicity = "daily")
+```
 
 ---
 # tidyverse
 
+En el mundo `tidyverse` debemos considerar:
+
+1. No es específico para análisis financiero ni su propósito esta pensado
+en trabajar con series de tiempo. 
+
+2. Usar `tidyverse` implicaría un uso intensivo de `dplyr` para transformar y 
+organizar nuestros datos.
+
+3. En este mundo, nuestros datos estarán almacenados en **data frames** o 
+**tibble**.
 
 ---
 # tidyquant
+
+En el mundo `tidyverse` debemos considerar:
+
+1. Tendremos lo mejor de ambos mundos, integrando las opciones financieras de `PerformanceAnalytics` con la transformación/manipulación del `tidyverse`.
+
+2. Se suman dos paquetes: `timetk` y `tibbletime`.
+
+A continuación descargaremos el Standard &amp; Poor´s 500 (`^GSPC`) utilizando
+`tq_get` del `tidyquant`:
+
+
+```r
+library("tidyquant")
+
+sp50_tbl &lt;- tq_get("^GSPC",
+                   from = "2018-01-01",
+                   to = "2018-02-01",
+                   periodicity = "daily") 
+```
 
 
 ---
@@ -93,6 +155,19 @@ class: center, inverse, middle
 ---
 # Importación   
 
+La extracciòn de datos depende del **tipo** y por consiguiente de la **fuente**. Las funciones relevantes son:
+
+1. Obtener **Stock Index**, `tq_index()` y **Stock Exchange**, `tq_exchange()`: como resultado tendremos los **tickers** o *stock symbols* con sus atributos. Existen 18 índices y 3 *exchanges*.
+
+    - `tq_index_options()` 
+    - `tq_exchange_options()`
+
+2. Obtener datos cuantitativos, `tq_get()`: Obtenemos datos desde distintas fuentes online.
+
+    - `tq_get_options()`
+
+    El más usado es `stock.prices`, el que descarga directamente 
+    desde **yahoo finance**.
 ---
 # Transformación
 
@@ -113,6 +188,7 @@ class: center, inverse, middle
 ---
 # Visualización de los retornos del portafolio
     </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="https://platform.twitter.com/widgets.js"></script>
 <script>var slideshow = remark.create({
@@ -124,16 +200,57 @@ class: center, inverse, middle
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function() {
-  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
 })();</script>
 
 <script>
 (function() {
-  var i, text, code, codes = document.getElementsByTagName('code');
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
   for (i = 0; i < codes.length;) {
     code = codes[i];
     if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
@@ -147,14 +264,15 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     i++;
   }
-})();
+};
+slideshow._releaseMath(document);
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);

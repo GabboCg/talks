@@ -4,7 +4,7 @@ subtitle: "Trasladando el análisis financiero al Tidyverse"
 author: 'Gabriel Cabrera <br> Universidad de Chile <br><br> <a href="https://github.com/GaboCg"><i class="fa fa-github fa-fw"></i>&nbsp; GaboCg </a><br> <a href="https://twitter.com/GaboC_g"> <i class="fa fa-twitter fa-fw"></i>&nbsp; @GaboC_g</a><br> <a href="mailto:gcabrerag@fen.uchile.cl"><i class="fa fa-paper-plane fa-fw"></i>&nbsp; gcabrerag@fen.uchile.cl</a><br>'
 output:
   xaringan::moon_reader:
-    css: ["default", "css/my-theme.css", "css/my-fonts.css"]
+    css: ["default", "css/my-theme.css", "css/my-fonts.css", "hygge"]
     lib_dir: libs
     nature:
       highlightStyle: github
@@ -49,6 +49,14 @@ background-position: 97% 5%
 
 3. **tidyquant** integra los mejores recursos/paquetes para colectar y analizar datos financieros: zoo, xts, quantmod, TTR y PerformanceAnalytic, con la infraestructura **tidy data**<sup>1</sup> del tidyverse, permitiendo la interacción entre ambos.
 
+.question[Instale y descargue `tidyquant`.]
+
+```r
+install.packages("tidyquant")
+library("tidyquant")
+```
+
+
 
 .footnote[
 [1] Para mayor detalle ver el paper "Tidy Data (2014)" de Hadley Wickham.
@@ -58,14 +66,14 @@ background-position: 97% 5%
 
 # Resumen de los paquetes
 
-1. xts o eXtensible time series: Es una estructura de datos y a la vez una librería para manipular series de tiempo. Detras se encuentra la estructura zoo.
+1. **xts** o **eXtensible time series**: Es una estructura de datos y a la vez una librería para manipular series de tiempo. Detras se encuentra la estructura zoo.
 
-2. quantmod o  Quantitative Financial Modelling & Trading Framework: Es una librería diseñada para 
+2. **quantmod** o  **Quantitative Financial Modelling & Trading Framework**: Es una librería diseñada para 
 recuperar, manipular y modelar datos cuantitativos financieros. 
 
-3. TTR o Technical Trading Rules: Paquete que incluye varias funciones para computar análisis técnico.
+3. **TTR** o **Technical Trading Rules**: Paquete que incluye varias funciones para computar análisis técnico.
 
-4. PerformanceAnalytics: Incluye una colección de funciones econométricas para desempeño y análisis de riesgo. Se necesita los retornos y no los precios. 
+4. **PerformanceAnalytics**: Incluye una colección de funciones econométricas para desempeño y análisis de riesgo. Se necesita los retornos y no los precios. 
 
 ---
 class: center, inverse, middle
@@ -75,13 +83,65 @@ class: center, inverse, middle
 ---
 # xts 
 
+En el mundo `xts` debemos considerar:
+
+1. `xts` es un paquete y un tipo de objeto.
+
+2. Contiene series de tiempo, ubicando la fecha en el `index` de cada observación. 
+
+3. Los paquetes cruciales para trabajar en el mundo del `xts` son: `quantmod` y
+`PerformanceAnalytics`. `quantmod` permite acceder a internet y extraer los 
+precios en un objeto `xts`. `PerformanceAnalytics`, contiene funciones útiles
+para analizar el *performance* de portafolios: `StdDev()`, `SharpeRatio()`,
+`SortinoRatio()` y `CAPM.beta()`.
+
+A continuación descargaremos el Standard & Poor´s 500 (`^GSPC`) utilizando
+`quantmod`: 
+
+```{r, echo=TRUE, message=FALSE, results='hide'}
+library("quantmod")
+
+getSymbols("^GSPC",
+           from = "2018-01-01",
+           to = "2018-02-01",
+           periodicity = "daily")
+
+```
 
 ---
 # tidyverse
 
+En el mundo `tidyverse` debemos considerar:
+
+1. No es específico para análisis financiero ni su propósito esta pensado
+en trabajar con series de tiempo. 
+
+2. Usar `tidyverse` implicaría un uso intensivo de `dplyr` para transformar y 
+organizar nuestros datos.
+
+3. En este mundo, nuestros datos estarán almacenados en **data frames** o 
+**tibble**.
 
 ---
 # tidyquant
+
+En el mundo `tidyverse` debemos considerar:
+
+1. Tendremos lo mejor de ambos mundos, integrando las opciones financieras de `PerformanceAnalytics` con la transformación/manipulación del `tidyverse`.
+
+2. Se suman dos paquetes: `timetk` y `tibbletime`.
+
+A continuación descargaremos el Standard & Poor´s 500 (`^GSPC`) utilizando
+`tq_get` del `tidyquant`:
+
+```{r, message=FALSE}
+library("tidyquant")
+
+sp50_tbl <- tq_get("^GSPC",
+                   from = "2018-01-01",
+                   to = "2018-02-01",
+                   periodicity = "daily") 
+```
 
 
 ---
@@ -92,6 +152,19 @@ class: center, inverse, middle
 ---
 # Importación   
 
+La extracciòn de datos depende del **tipo** y por consiguiente de la **fuente**. Las funciones relevantes son:
+
+1. Obtener **Stock Index**, `tq_index()` y **Stock Exchange**, `tq_exchange()`: como resultado tendremos los **tickers** o *stock symbols* con sus atributos. Existen 18 índices y 3 *exchanges*.
+
+    - `tq_index_options()` 
+    - `tq_exchange_options()`
+
+2. Obtener datos cuantitativos, `tq_get()`: Obtenemos datos desde distintas fuentes online.
+
+    - `tq_get_options()`
+
+    El más usado es `stock.prices`, el que descarga directamente 
+    desde **yahoo finance**.
 ---
 # Transformación
 
