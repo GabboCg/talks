@@ -178,6 +178,15 @@ stocks_daily_tbl <- tq_get(symbols,
 
 <i class="fa fa-question-circle fa-fw"></i>  .question[ Descargue la tasa libre de riesgo mensual del bono de Estados Unidos a 10 años (DGS10), desde Enero del 2010 hasta  Diciembre del 2018]
 
+```{r}
+tbill_daily_tbl <- tq_get("DGS10",
+  get = "economic.data",
+  from = "2013-01-01",
+  to = "2019-01-01",
+  periodicity = "daily")
+```
+
+
 
 ---
 # Transformación
@@ -537,7 +546,7 @@ portfolio_returns_monthly <- stock_returns_monthly_tbl %>%
 ```
 
 ---
-# Visusalización de los retornos: ggplot2
+# Visualización de los retornos: ggplot2
 
 ```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center'}
 portfolio_returns_monthly %>% 
@@ -551,7 +560,7 @@ portfolio_returns_monthly %>%
 
 
 ---
-# Visusalización de los retornos: highcharter
+# Visualización de los retornos: highcharter
    
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(highcharter)
@@ -570,7 +579,7 @@ highchart(type = "stock") %>%
   
 
 ---
-# Visusalización de los retornos: plotly
+# Visualización de los retornos: plotly
 
 Existe el paquete plotly el que nos permite construir gráficos dinamicos. A continuación les presentó lo útil que es para realizar análisis técnico.
   
@@ -583,29 +592,58 @@ class: center, inverse, middle
 ---
 # Recomendaciones 
 
-Resumenes:
+Libro basado en tidyquant de [Jonathan K. Regenstein Jr.](https://www.linkedin.com/in/jkregenstein):
 
-1. Todas las opciones de los *R code chunk* se encuentran en la página web personal de su 
-autor [Yihui Xie](https://yihui.name/knitr/options). 
-
-2. RStudio ha ido creado *cheat sheets*, el que incluye una página de [R Markdown](https://www.rstudio.com/resources/cheatsheets/).
-
-Libros basados en R Markdown de [Yihui Xie](https://yihui.name/en/):
-
-1. [R Markdown: Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
-
-2. [Bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/)
-
-3. [Blogdown: Creating Websites with R Markdown](https://bookdown.org/yihui/blogdown/)
+1. [Reproducible Finance with R: Code Flows and Shiny Apps for Portfolio Analysis](https://www.amazon.com/Reproducible-Finance-Portfolio-Analysis-Chapman/dp/1138484032)
 
 ---
 class: center, middle
 
 # Muchas Gracias
 
-<iframe src="https://giphy.com/embed/FpZvxELO5xE8QcFdoc" width="480" height="247" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/oscars-academy-awards-oscars-2019-FpZvxELO5xE8QcFdoc"></a></p>
+<iframe src="https://giphy.com/embed/iCMp6OHwYRQ1q" width="480" height="246" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/fallontonight-reaction-gif-jimmy-fallon-iCMp6OHwYRQ1q"></a></p>
 
-Slides creadas por la librería de R [**xaringan**](https://github.com/yihui/xaringan).
+Slides creadas por el paquete de R [**xaringan**](https://github.com/yihui/xaringan).
 
 El chakra proviene [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), y [R Markdown](https://rmarkdown.rstudio.com).
 
+
+<!-- library("tidyquant") -->
+
+<!-- symbols <- c("FB", "AAPL", "NFLX", "GOOG") -->
+
+<!-- stocks_tbl <- tq_get(symbols, -->
+<!--   get = "stock.prices", -->
+<!--   from = "2013-01-01", -->
+<!--   to = "2019-01-01", -->
+<!--   periodicity = "daily") -->
+
+<!-- stock_returns_xts <- getSymbols(symbols, -->
+<!--   src = "yahoo", -->
+<!--   from = "2013-01-01", -->
+<!--   to = "2019-01-01", -->
+<!--   periodicity = "daily") %>%  -->
+<!--   map(~Cl(get(.))) %>% -->
+<!--   map(~to.monthly(.,indexAt = "lastof", OHLC = FALSE)) %>%  -->
+<!--   reduce(merge) %>% -->
+<!--   `colnames<-`(symbols) %>%  -->
+<!--   data.frame(date = as.Date(as.yearmon(index(.)))) %>%  -->
+<!--   remove_rownames() %>%  -->
+<!--   gather(symbol, price, -date) %>%  -->
+<!--   group_by(symbol) %>%  -->
+<!--   mutate(returns_monthly = Delt(price, type = "log")) %>%  -->
+<!--   select(-price) %>%  -->
+<!--   filter(!is.na(returns_monthly)) %>%  -->
+<!--   spread(symbol, returns_monthly) -->
+
+<!-- stock_returns_tbl <- stocks_tbl %>%  -->
+<!--   select(date, symbol, close) %>%  -->
+<!--   group_by(symbol) %>%  -->
+<!--   tq_transmute(mutate_fun = periodReturn, -->
+<!--                period = "monthly", -->
+<!--                type = "log", -->
+<!--                col_rename = "returns_monthly", -->
+<!--               ) %>%  -->
+<!--   slice(-1) %>%  -->
+<!--   mutate(date = as.Date(as.yearmon(date))) %>%  -->
+<!--   spread(symbol, returns_monthly)  -->
