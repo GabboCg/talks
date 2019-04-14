@@ -69,9 +69,9 @@ library("tidyquant")
 
 # Resumen de los paquetes
 
-1. **xts** o **eXtensible time series**: Es una estructura de datos y a la vez una librería para manipular series de tiempo. Detras se encuentra la estructura zoo.
+1. **xts** o **eXtensible time series**: Es una estructura de datos y a la vez un paquete para manipular series de tiempo. Detras se encuentra la estructura zoo.
 
-2. **quantmod** o  **Quantitative Financial Modelling & Trading Framework**: Es una librería diseñada para 
+2. **quantmod** o  **Quantitative Financial Modelling & Trading Framework**: Es un paquete diseñado para 
 recuperar, manipular y modelar datos cuantitativos financieros. 
 
 3. **TTR** o **Technical Trading Rules**: Paquete que incluye varias funciones para computar análisis técnico.
@@ -244,7 +244,11 @@ DT::datatable(stocks_monthly_tbl,
 ---
 # Transformación: Retornos 
 
+Para calcular el retorno logarìtmico se debe aplicar la formula: 
+
 $$r_t = log(1 + R_t) = log(\frac{P_t}{P_{t-1}}) = p_t - p_{t-1}$$
+
+<i class="fa fa-question-circle fa-fw"></i> .question[Calcule el retorno logarítmico mensual para FANG]
 
 ```{r, echo=TRUE, eval=TRUE}
 stock_returns_monthly_tbl <- stocks_monthly_tbl %>% 
@@ -263,11 +267,15 @@ stock_returns_monthly_tbl <- stocks_monthly_tbl %>%
 ---
 # Transformación: Retornos acumulados
 
+En el caso de querer el retorno acumulado, usamos la función `cumsum()`.  
+
+<i class="fa fa-question-circle fa-fw"></i>  .question[Calcule el retorno logarítmico acumulado de FANG]
+
 ```{r}
 stock_returns_acum_monthly_tbl <- stock_returns_monthly_tbl %>% 
   gather(symbol, returns, -date) %>% 
   group_by(symbol) %>% 
-  mutate(returns_acum = cumsum(returns)) %>% 
+  mutate(returns_acum = cumsum(returns)) %>%    #<<
   select(-returns) %>% 
   spread(symbol, returns_acum)
 ```
@@ -286,14 +294,20 @@ DT::datatable(stock_returns_acum_monthly_tbl,
 ---
 # Visualización
 
-1. Una manera de graficar los retornos es usar `geom_density()`, que es la versión suavisada de un histograma y se suele usar para datos que son continuos. 
+1. Para graficar datos financieros:
 
-2. Intenten con `geom_line()` y vean que sucede.
+    - *highcharter*: Cuando los datos sean **xts** y queramos que sean interactivo. Desde tibble a **xts** se         usa `tk_xts()` del paquete `timetk`.
+    
+    - *ggplot2*: Cuando los datos sean almacenado en **tibble** o **data frame**.
+
+2. Una manera de graficar los retornos es usar `geom_density()`, que es la versión suavisada de un histograma y se suele usar para datos que son continuos.
 
 3. Para graficar los retornos acumulados, se recomienda usar `geom_line()`.
 
 ---
 # Visualización: Retornos
+
+<i class="fa fa-question-circle fa-fw"></i> .question[Grafique los retornos logarítmicos de FANG]
 
 ```r
 stock_returns_monthly_tbl  %>%
@@ -326,6 +340,9 @@ stock_returns_monthly_tbl  %>%
 
 ---
 # Visualización: Retornos acumulados 
+
+
+<i class="fa fa-question-circle fa-fw"></i> .question[Grafique los retornos logarítmicos acumulados de FANG]
 
 ```r
 stock_returns_acum_monthly_tbl %>%
@@ -363,6 +380,7 @@ class: center, inverse, middle
 # Análisis Técnico
 
 ---
+# ¿Qué es el Análisis Técnico?
 
 1. El análisis técnico consiste en detectar determinados patrones de comportamiento de los precios en el pasado, con la esperanza de que dicho patrones vuelvan a repetirse y poder así aprovecharnos de ello.
 
@@ -372,6 +390,8 @@ class: center, inverse, middle
 
 ---
 # Análisis Técnico: Bandas de Bollinger 
+
+Comparar la volatilidad de la cotización de cualquier activo y el valor relativo de su precio a lo largo de un período de tiempo.
 
 - La línea central (*Middle Line*, ML) es una media móvil simple.
 
@@ -387,17 +407,22 @@ $$BL = ML - (D * \sigma)$$
 
 ---
 
+<i class="fa fa-book fa-fw"></i>  .example[Construcción Bandas de Bollinger]
+
+Solo seleccionaremos las últimas 6 semanas del Standard and Poor's a partir de la fecha 2018-07-31.
+
 ```{r, eval = TRUE, echo = TRUE}
 end <- as_date("2018-07-31")
 ```
 
+El `tibble` debe contener las variables: open, high, low y close (OHLC). 
 
 ```r
 sp500_tbl %>% 
   ggplot(aes(x=date, y=close, open = open,
              high = high, low = low, close = close)) +
-  geom_candlestick() +
-  geom_bbands(ma_fun = SMA, sd = 2, n = 20) +             
+* geom_candlestick() +                                   
+* geom_bbands(ma_fun = SMA, sd = 2, n = 20) +             
   labs(title = "Standard & Poor 500 Candlestick Chart", 
        subtitle = "BBands con SMA", 
        y = "Precio de Cierre", x = "Fecha") + 
@@ -413,8 +438,8 @@ sp500_tbl %>%
   ggplot(aes(x=date, y=close, open = open,
              high = high, low = low, close = close)) +
   geom_candlestick() +
-  geom_bbands(ma_fun = SMA, sd = 2, n = 20) +             #<<
-  labs(title = "Standard & Poor 500 Candlestick Chart", 
+  geom_bbands(ma_fun = SMA, sd = 2, n = 20) +           
+  labs(title = "Standard & Poor 500 Candlestick Chart",   
        subtitle = "BBands con SMA, últimos 6 meses", 
        y = "Precio de Cierre", x = "Fecha") + 
   coord_x_date(xlim = c(end - weeks(12), end),
@@ -428,7 +453,7 @@ sp500_tbl %>%
 
 |     INDICATOR                                  |	TTR NAME |	QUANTMOD NAME |
 |------------------------------------------------|:---------:|:--------------:|
-|Welles Wilder`s Directional Movement Indicator  |  	ADX    | addADX         | 
+|Welles Wilders  Directional Movement Indicator  |  	ADX    | addADX         | 
 |Double Exponential Moving Average               |	DEMA     | addDEMA        |
 |Exponential Moving Average	                     | EMA	     | addEMA         |
 |Simple Moving Average	                         | SMA	     | addSMA         |
@@ -437,7 +462,6 @@ sp500_tbl %>%
 |Moving Average Convergence Divergence	         | MACD      | addMACD        |
 |Triple Smoothed Exponential Oscillator	         | TRIX      | addTRIX        |
 |Weighted Moving Average	                       | WMA	     | addWMA         |
-
 
 ---
 # Análisis Técnicos: Volatility
@@ -456,6 +480,7 @@ sp500_tbl %>%
 |Chaiken Money Flow	|CMF	      | addCMF        |
 |Volume	            |N/A        |	addVo         |
 
+
 ---
 # Análisis Técnicos: Momentum
 
@@ -468,7 +493,7 @@ sp500_tbl %>%
 |Rate of Change	            | ROC	      | addROC       |
 |Relative Strength Indicator|	RSI       |	addRSI       |
 |Stocastic Momentum Index	  | SMI	      | addSMI       |
-|Williams %R	              | WPR	      | addWPR       |
+|Williams %R                | WPR	      | addWPR       |
 
 ---
 class: center, inverse, middle
@@ -477,64 +502,110 @@ class: center, inverse, middle
 ---
 # Asignando los pesos
 
-```{r}
-w <- c(0.25,
-       0.25,
-       0.25,
-       0.25)
-```
+Como sabemos de nuestros cursos de finanzas, para construir un portafolio necesitamos los pesos. Estos pueden provenir de una procesos de optimización o bien asignarlos bajo algún criterio. 
 
 ```{r}
+w <- c(0.25, 0.25, 0.25, 0.25)
+```
+
+Luego lo asignamos a cada `symbols`.  
+
+```{r, echo=TRUE, results='hide'}
 tibble(symbols, w) 
 ```
 
-```{r}
+Debemos verificar que sumen 1.
+
+```{r, echo=TRUE, results='hide'}
 tibble(symbols, w) %>% 
   summarise(total_weight = sum(w))
 ```
 
 ---
 # Retornos del portafolio
+  
+<i class="fa fa-question-circle fa-fw"></i> .question[Calcule el retorno del portafolio rebalanceandolo cada mes]
 
 ```{r}
 portfolio_returns_monthly <- stock_returns_monthly_tbl %>% 
   gather(asset, returns, -date) %>% 
-  tq_portfolio(assets_col = asset,
-               returns_col = returns,
-               weights = w,
-               col_rename = "returns",
-               rebalance_on = "months")
+  tq_portfolio(assets_col =  asset,   #<<
+    returns_col = returns,            #<<
+    weights = w,                      #<<
+    col_rename = "returns",           #<<
+    rebalance_on = "months")          #<<
+```
+
+---
+# Visusalización de los retornos: ggplot2
+
+```{r, echo=FALSE, fig.width=6, fig.height=3, fig.align='center'}
+portfolio_returns_monthly %>% 
+                mutate(returns = round(returns,4)*100) %>% 
+  ggplot(aes(x=date, y=returns)) + 
+  geom_bar(stat="identity", fill = "orange") + 
+  labs(title = "Retornos Portfolio",subtitle = "Data Viz. usando ggplot2", 
+       x = "Fecha", y = "Retornos (%)") +  
+  theme_tq()
 ```
 
 
 ---
-# Visualización de los retornos del portafolio
+# Visusalización de los retornos: highcharter
+   
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(highcharter)
+library(timetk)
 
-```{r, echo=FALSE, message=FALSE}
-library("highcharter")
-
-highchart(type = "stock") %>%
-  hc_title(text = "Retornos Mensuales del Portafolio") %>%
+highchart(type = "stock") %>% 
   hc_add_series(portfolio_returns_monthly %>% 
-                timetk::tk_xts(select = "returns",
-                               date_var = "date"),
-                name = "Rebalanceado Mensuales",
-                color = "cornflowerblue") %>%
-  hc_add_theme(hc_theme_flat()) %>%
-  hc_navigator(enabled = FALSE) %>%
-  hc_scrollbar(enabled = FALSE) %>%
-  hc_legend(enabled = TRUE) %>%
-  hc_exporting(enabled = TRUE)
+                mutate(returns = round(returns,4)*100) %>% 
+                tk_xts(), 
+                type = "column", 
+                name = "Portfolio", color = "orange") %>% 
+  hc_title(text = "Retornos Portafolio") %>% 
+  hc_subtitle(text = "Data Viz. usando highchart") %>% 
+  hc_tooltip(pointFormat = '{point.y:.2f}%')
 ```
+  
 
+---
+# Visusalización de los retornos: plotly
 
---- 
+Existe el paquete plotly el que nos permite construir gráficos dinamicos. A continuación les presentó lo útil que es para realizar análisis técnico.
+  
+* [Ejemplo plotly](https://gabocg.github.io/technical_analysis_with_plotly/)
+
+---
 class: center, inverse, middle
 
-# Paquete plotly en finanzas
+# Material de Apoyo 
+---
+# Recomendaciones 
+
+Resumenes:
+
+1. Todas las opciones de los *R code chunk* se encuentran en la página web personal de su 
+autor [Yihui Xie](https://yihui.name/knitr/options). 
+
+2. RStudio ha ido creado *cheat sheets*, el que incluye una página de [R Markdown](https://www.rstudio.com/resources/cheatsheets/).
+
+Libros basados en R Markdown de [Yihui Xie](https://yihui.name/en/):
+
+1. [R Markdown: Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+
+2. [Bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/)
+
+3. [Blogdown: Creating Websites with R Markdown](https://bookdown.org/yihui/blogdown/)
 
 ---
+class: center, middle
 
-Existe el paquete plotly el que nos permite construir gráficos dinamicos. A continuación les presentó lo útil que es para realizar análisis técnico:
+# Muchas Gracias
 
-1. [Ejemplo plotly](https://gabocg.github.io/technical_analysis_with_plotly/)
+<iframe src="https://giphy.com/embed/FpZvxELO5xE8QcFdoc" width="480" height="247" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/oscars-academy-awards-oscars-2019-FpZvxELO5xE8QcFdoc"></a></p>
+
+Slides creadas por la librería de R [**xaringan**](https://github.com/yihui/xaringan).
+
+El chakra proviene [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), y [R Markdown](https://rmarkdown.rstudio.com).
+
