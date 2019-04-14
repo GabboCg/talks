@@ -49,12 +49,17 @@ background-position: 97% 5%
 
 3. **tidyquant** integra los mejores recursos/paquetes para colectar y analizar datos financieros: zoo, xts, quantmod, TTR y PerformanceAnalytic, con la infraestructura **tidy data**<sup>1</sup> del tidyverse, permitiendo la interacción entre ambos.
 
-.question[Instale y descargue `tidyquant`.]
+<i class="fa fa-question-circle fa-fw"></i> .question[ Instale y descargue `tidyquant`.]
 
 ```r
 install.packages("tidyquant")
 library("tidyquant")
 ```
+
+```{r, echo=FALSE, message=FALSE}
+library("tidyquant")
+```
+
 
 .footnote[
 [1] Para mayor detalle ver el paper "Tidy Data (2014)" de Hadley Wickham.
@@ -93,17 +98,15 @@ precios en un objeto `xts`. `PerformanceAnalytics`, contiene funciones útiles
 para analizar el *performance* de portafolios: `StdDev()`, `SharpeRatio()`,
 `SortinoRatio()` y `CAPM.beta()`.
 
-A continuación descargaremos el Standard & Poor´s 500 (`^GSPC`) utilizando
-`quantmod`: 
+<i class="fa fa-question-circle fa-fw"></i> .question[ Descargue el Standard & Poor´s 500 (`^GSPC`) utilizando `quantmod` desde 2018-01-01 hasta 2018-12-01.]
 
 ```{r, echo=TRUE, message=FALSE, results='hide'}
 library("quantmod")
 
 getSymbols("^GSPC",
            from = "2018-01-01",
-           to = "2018-02-01",
+           to = "2018-12-01",
            periodicity = "daily")
-
 ```
 
 ---
@@ -123,24 +126,20 @@ organizar nuestros datos.
 ---
 # tidyquant
 
-En el mundo `tidyverse` debemos considerar:
+En el mundo `tidyquant` debemos considerar:
 
 1. Tendremos lo mejor de ambos mundos, integrando las opciones financieras de `PerformanceAnalytics` con la transformación/manipulación del `tidyverse`.
 
 2. Se suman dos paquetes: `timetk` y `tibbletime`.
 
-A continuación descargaremos el Standard & Poor´s 500 (`^GSPC`) utilizando
-`tq_get` del `tidyquant`:
+<i class="fa fa-question-circle fa-fw"></i> .question[ Descargue el Standard & Poor´s 500 (`^GSPC`) desde 2018-01-01 hasta 2018-02-01 utilizando `tidyquant`.]
 
-```{r, message=FALSE}
-library("tidyquant")
-
-sp50_tbl <- tq_get("^GSPC",
+```{r}
+sp500_tbl <- tq_get("^GSPC",
                    from = "2018-01-01",
-                   to = "2018-02-01",
+                   to = "2018-12-01",
                    periodicity = "daily") 
 ```
-
 
 ---
 class: center, inverse, middle
@@ -148,9 +147,9 @@ class: center, inverse, middle
 # Workflow con tidyquant
 
 ---
-# Importación   
+# Importación
 
-La extracciòn de datos depende del **tipo** y por consiguiente de la **fuente**. Las funciones relevantes son:
+La extracciòn de datos depende del **tipo** y de la **fuente**. Las funciones relevantes son:
 
 1. Obtener **Stock Index**, `tq_index()` y **Stock Exchange**, `tq_exchange()`: como resultado tendremos los **tickers** o *stock symbols* con sus atributos. Existen 18 índices y 3 *exchanges*.
 
@@ -161,24 +160,381 @@ La extracciòn de datos depende del **tipo** y por consiguiente de la **fuente**
 
     - `tq_get_options()`
 
-    El más usado es `stock.prices`, el que descarga directamente 
-    desde **yahoo finance**.
+    El más usado es `stock.prices`, que descarga directamente 
+    desde **yahoo finance** y `economic.data` desde **FRED** Federal Reserve of Saint Louis.
+
+---
+<i class="fa fa-question-circle fa-fw"></i>  .question[ Seleccione las acciones diarias de Facebook (FB), Apple (AAPL), Netflix (NFLX) y Google (GOOG), desde Enero del 2013 hasta Diciembre del 2018]
+
+```{r, message=FALSE}
+symbols <- c("FB", "AAPL", "NFLX", "GOOG")
+
+stocks_daily_tbl <- tq_get(symbols,
+  get = "stock.prices",
+  from = "2013-01-01",
+  to = "2019-01-01",
+  periodicity = "daily")
+```
+
+<i class="fa fa-question-circle fa-fw"></i>  .question[ Descargue la tasa libre de riesgo mensual del bono de Estados Unidos a 10 años (DGS10), desde Enero del 2010 hasta  Diciembre del 2018]
+
+
 ---
 # Transformación
+  
+1. Para efecto del curso **la transformación** será pasar datos diarios a mensual/anual.
+
+2. Luego calcular el retorno y retorno acumulado.
+
+<i class="fa fa-book fa-fw"></i>  .example[ Deberìamos obtener el mismo resultado, si pasamos nuestros datos diarios a mensual/anual o si los descargamos directamente mensual/anual, como veremos a continuación.]
+
+  Utilizando el objeto `stocks_tbl` que contiene en un `tibble` los precios de FANG, seleccionamos solo la observación         final dentro de cada mes (`lastof`). 
+  
+```{r}
+stocks_daiĺy_to_monthly_tbl <- stocks_daily_tbl %>% 
+  select(date, symbol, close) %>%
+  group_by(symbol) %>%  
+  tq_transmute(mutate_fun = to.monthly,  #<< 
+               indexAt = "lastof") %>% #<< 
+  mutate(date = as.Date(as.yearmon(date))) %>% 
+  select(date, symbol, close) %>% 
+  spread(symbol, close)
+```
+  
+---
+Obteniendo el siguiente resultado.
+
+```{r, echo=FALSE}
+DT::datatable(stocks_daiĺy_to_monthly_tbl, 
+  colnames = c('Fecha', symbols),
+  options = list(
+  columnDefs = list(list(className = 'dt-center', targets = c(1,2,3,4,5))),
+  pageLength = 5,
+  lengthMenu = c(1,2,3,4,5),
+  autoWidth = TRUE,
+  columnDefs = list(list(width = '20%', targets = list(1,2,3,4,5))))) %>% DT::formatRound(symbols, 2)
+```
+
+---
+
+Utilizando la opción `monthly` y realizando alguna manipulación obtenemos el mismo 
+resultado.
+
+```{r}
+stocks_monthly_tbl <- tq_get(symbols,
+  get = "stock.prices",
+  from = "2013-01-01",
+  to = "2019-01-01",
+  periodicity = "monthly") %>% 
+  select(date, symbol, close) %>% 
+  spread(symbol, close)
+```
+
+```{r, echo=FALSE}
+DT::datatable(stocks_monthly_tbl, 
+  colnames = c('Fecha', symbols),
+  options = list(
+  columnDefs = list(list(className = 'dt-center', targets = c(1,2,3,4,5))),
+  pageLength = 5,
+  lengthMenu = c(1,2,3,4,5),
+  autoWidth = TRUE,
+  columnDefs = list(list(width = '20%', targets = list(1,2,3,4,5))))) %>% DT::formatRound(symbols, 2)
+```
+
+---
+# Transformación: Retornos 
+
+$$r_t = log(1 + R_t) = log(\frac{P_t}{P_{t-1}}) = p_t - p_{t-1}$$
+
+```{r, echo=TRUE, eval=TRUE}
+stock_returns_monthly_tbl <- stocks_monthly_tbl %>% 
+  gather(symbols, close, -date) %>% 
+  group_by(symbols) %>% 
+  tq_transmute(mutate_fun = periodReturn,        #<<
+               period = "monthly",               #<<
+               type = "log",                     #<<
+               col_rename = "returns_monthly",   #<<
+              ) %>%                              #<<
+  slice(-1) %>% 
+  mutate(date = as.Date(as.yearmon(date))) %>% 
+  spread(symbols, returns_monthly) 
+```
+
+---
+# Transformación: Retornos acumulados
+
+```{r}
+stock_returns_acum_monthly_tbl <- stock_returns_monthly_tbl %>% 
+  gather(symbol, returns, -date) %>% 
+  group_by(symbol) %>% 
+  mutate(returns_acum = cumsum(returns)) %>% 
+  select(-returns) %>% 
+  spread(symbol, returns_acum)
+```
+
+```{r, echo=FALSE}
+DT::datatable(stock_returns_acum_monthly_tbl, 
+  colnames = c('Fecha', symbols),
+  options = list(
+  columnDefs = list(list(className = 'dt-center', targets = c(1,2,3,4,5))),
+  pageLength = 2,
+  lengthMenu = c(1,2,3,4,5),
+  autoWidth = TRUE,
+  columnDefs = list(list(width = '20%', targets = list(1,2,3,4,5))))) %>% DT::formatRound(symbols, 4)
+```
 
 ---
 # Visualización
 
+1. Una manera de graficar los retornos es usar `geom_density()`, que es la versión suavisada de un histograma y se suele usar para datos que son continuos. 
+
+2. Intenten con `geom_line()` y vean que sucede.
+
+3. Para graficar los retornos acumulados, se recomienda usar `geom_line()`.
+
+---
+# Visualización: Retornos
+
+```r
+stock_returns_monthly_tbl  %>%
+  gather(symbol, returns, -date) %>% 
+  ggplot(mapping = aes(x = returns, fill = symbol)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Retornos Activos", subtitle = "Facebook (FB), Amazon (AMZN), Netflix (NFLX) y Google (GOOG)",
+       x = "Retornos diarios", y = "Densidad") + 
+  theme_tq() +
+  scale_fill_tq() + 
+  facet_wrap(~ symbol, ncol = 2) + 
+  guides(fill=guide_legend(title="Activos:"))
+```
+
+---
+
+```{r,fig.width = 7, fig.height = 4, fig.align='center', echo=FALSE}
+stock_returns_monthly_tbl  %>%
+  gather(symbol, returns, -date) %>% 
+  ggplot(mapping = aes(x = returns, fill = symbol)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Retornos", subtitle = "Facebook (FB), Amazon (AMZN), Netflix (NFLX) y Google (GOOG)",
+       x = "Retornos diarios", y = "Densidad") + 
+  theme_tq() +
+  scale_fill_tq() + 
+  facet_wrap(~ symbol, ncol = 2) + 
+  guides(fill=guide_legend(title="Activos:"))
+```
+
+
+---
+# Visualización: Retornos acumulados 
+
+```r
+stock_returns_acum_monthly_tbl %>%
+  gather(symbol, returns_acum, -date) %>% 
+  ggplot(mapping = aes(x = date, y = returns_acum, color = symbol)) +
+  geom_line() + 
+  labs(title = "Retornos Acumulado", subtitle = "Facebook (FB), Amazon (AMZN), Netflix (NFLX) y Google (GOOG)",
+          x = "Periodo", y = "Retorno Acumulado") + 
+  theme_tq() +
+  scale_fill_tq() + 
+  facet_wrap(~ symbol, ncol = 2) + 
+  guides(color = guide_legend(title="Activos:")) + 
+  scale_y_continuous(labels = scales::percent)
+```
+
+---
+
+```{r, echo=FALSE, fig.width=7, fig.height=4, fig.align='center'}
+stock_returns_acum_monthly_tbl %>%
+  gather(symbol, returns_acum, -date) %>% 
+  ggplot(mapping = aes(x = date, y = returns_acum, color = symbol)) +
+  geom_line() + 
+  labs(title = "Retornos Acumulado", subtitle = "Facebook (FB), Amazon (AMZN), Netflix (NFLX) y Google (GOOG)",
+          x = "Periodo", y = "Retorno Acumulado") + 
+  theme_tq() +
+  scale_fill_tq() + 
+  facet_wrap(~ symbol, ncol = 2) + 
+  guides(color = guide_legend(title="Activos:")) + 
+  scale_y_continuous(labels = scales::percent)
+```
+
+---
+class: center, inverse, middle
+
+# Análisis Técnico
+
+---
+
+1. El análisis técnico consiste en detectar determinados patrones de comportamiento de los precios en el pasado, con la esperanza de que dicho patrones vuelvan a repetirse y poder así aprovecharnos de ello.
+
+2. Las bases provienen de la **Teoría de Dow**.
+
+3. En esta sesiones veremos los *Bar Chart*, *Candlestick Chart* y las *Bandas de Bollinger*.
+
+---
+# Análisis Técnico: Bandas de Bollinger 
+
+- La línea central (*Middle Line*, ML) es una media móvil simple.
+
+$$SMA  = \frac{P_{M} + P_{M-1} + ... + P_{M - (n-1)}}{n} = ML$$
+
+- La línea superior (*Top Line*, TL) es la misma línea central pero desplazada hacia arriba a un número determinado de desviaciones estándares (D).
+
+$$TL = ML + (D * \sigma)$$
+
+- La línea inferior (*Bottom Line*, BL) es la línea central desplazada hacia abajo al mismo número de desviaciones estándares.
+
+$$BL = ML - (D * \sigma)$$
+
+---
+
+```{r, eval = TRUE, echo = TRUE}
+end <- as_date("2018-07-31")
+```
+
+
+```r
+sp500_tbl %>% 
+  ggplot(aes(x=date, y=close, open = open,
+             high = high, low = low, close = close)) +
+  geom_candlestick() +
+  geom_bbands(ma_fun = SMA, sd = 2, n = 20) +             
+  labs(title = "Standard & Poor 500 Candlestick Chart", 
+       subtitle = "BBands con SMA", 
+       y = "Precio de Cierre", x = "Fecha") + 
+  coord_x_date(xlim = c(end - weeks(12), end),
+               ylim = c(2500, 3000)) + 
+  theme_tq()
+```
+
+---
+
+```{r, echo=FALSE, fig.width = 7, fig.height = 4, fig.align='center', message=FALSE, warning=FALSE}
+sp500_tbl %>% 
+  ggplot(aes(x=date, y=close, open = open,
+             high = high, low = low, close = close)) +
+  geom_candlestick() +
+  geom_bbands(ma_fun = SMA, sd = 2, n = 20) +             #<<
+  labs(title = "Standard & Poor 500 Candlestick Chart", 
+       subtitle = "BBands con SMA, últimos 6 meses", 
+       y = "Precio de Cierre", x = "Fecha") + 
+  coord_x_date(xlim = c(end - weeks(12), end),
+               ylim = c(2500, 3000)) + 
+  theme_tq()
+```
+
+
+---
+# Análisis Técnicos: Tendencia 
+
+|     INDICATOR                                  |	TTR NAME |	QUANTMOD NAME |
+|------------------------------------------------|:---------:|:--------------:|
+|Welles Wilder`s Directional Movement Indicator  |  	ADX    | addADX         | 
+|Double Exponential Moving Average               |	DEMA     | addDEMA        |
+|Exponential Moving Average	                     | EMA	     | addEMA         |
+|Simple Moving Average	                         | SMA	     | addSMA         |
+|Parabolic Stop and Reverse	                     | SAR       | addSAR         |
+|Exponential Volume Weighted Moving Average      |	EVWMA    | addEVWMA       |
+|Moving Average Convergence Divergence	         | MACD      | addMACD        |
+|Triple Smoothed Exponential Oscillator	         | TRIX      | addTRIX        |
+|Weighted Moving Average	                       | WMA	     | addWMA         |
+
+
+---
+# Análisis Técnicos: Volatility
+
+|INDICATOR          | TTR NAME	| QUANTMOD NAME |
+|-------------------|:---------:|:-------------:|
+|Average True Range	| ATR       |	addATR        |
+|Bollinger Bands	  | BBands    |	addBBands     |
+|Price Envelope     |	N/A	      | addEnvelope   |
+
+---
+# Análisis Técnicos: Volume
+
+|INDICATOR	        |TTR NAME	  | QUANTMOD NAME |
+|:-----------------:|:---------:|:-------------:|
+|Chaiken Money Flow	|CMF	      | addCMF        |
+|Volume	            |N/A        |	addVo         |
+
+---
+# Análisis Técnicos: Momentum
+
+|INDICATOR	                | TTR NAME	| QUANTMOD NAME|
+|---------------------------|:---------:|:------------:|
+|Commodity Channel Index    |	CCI       |	addCCI       |
+|Chande Momentum Oscillator |	CMO	      | addCMO       |
+|Detrended Price Oscillator	| DPO	      | addDPO       |
+|momentum	                  |addMomentum|              |
+|Rate of Change	            | ROC	      | addROC       |
+|Relative Strength Indicator|	RSI       |	addRSI       |
+|Stocastic Momentum Index	  | SMI	      | addSMI       |
+|Williams %R	              | WPR	      | addWPR       |
 
 ---
 class: center, inverse, middle
 # Construyendo un portafolio
 
 ---
-# Asignando los pesos 
+# Asignando los pesos
+
+```{r}
+w <- c(0.25,
+       0.25,
+       0.25,
+       0.25)
+```
+
+```{r}
+tibble(symbols, w) 
+```
+
+```{r}
+tibble(symbols, w) %>% 
+  summarise(total_weight = sum(w))
+```
 
 ---
 # Retornos del portafolio
 
+```{r}
+portfolio_returns_monthly <- stock_returns_monthly_tbl %>% 
+  gather(asset, returns, -date) %>% 
+  tq_portfolio(assets_col = asset,
+               returns_col = returns,
+               weights = w,
+               col_rename = "returns",
+               rebalance_on = "months")
+```
+
+
 ---
 # Visualización de los retornos del portafolio
+
+```{r, echo=FALSE, message=FALSE}
+library("highcharter")
+
+highchart(type = "stock") %>%
+  hc_title(text = "Retornos Mensuales del Portafolio") %>%
+  hc_add_series(portfolio_returns_monthly %>% 
+                timetk::tk_xts(select = "returns",
+                               date_var = "date"),
+                name = "Rebalanceado Mensuales",
+                color = "cornflowerblue") %>%
+  hc_add_theme(hc_theme_flat()) %>%
+  hc_navigator(enabled = FALSE) %>%
+  hc_scrollbar(enabled = FALSE) %>%
+  hc_legend(enabled = TRUE) %>%
+  hc_exporting(enabled = TRUE)
+```
+
+
+--- 
+class: center, inverse, middle
+
+# Paquete plotly en finanzas
+
+---
+
+Existe el paquete plotly el que nos permite construir gráficos dinamicos. A continuación les presentó lo útil que es para realizar análisis técnico:
+
+1. [Ejemplo plotly](https://gabocg.github.io/technical_analysis_with_plotly/)

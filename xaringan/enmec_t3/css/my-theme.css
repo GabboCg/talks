@@ -222,10 +222,36 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
     display: block;
     margin: 12px 0;
     font-style: normal;
+    overflow: hidden;
 }
 
-.question:before {
-    content: "\f059  Pregunta. ";
+.question:before{
+    content: "Actividad. ";
     font-weight: bold;
     font-style: normal;
+}
+
+.fa-question-circle {
+  float: left;
+  color: #bd081c;  
+  font-size: 25px;
+}
+
+.example{
+    display: block;
+    margin: 12px 0;
+    font-style: normal;
+    overflow: hidden;
+}
+
+.example:before{
+    content: "Ejemplo. ";
+    font-weight: bold;
+    font-style: normal;
+}
+
+.fa-book {
+  float: left;
+  color: #ffbd1b;  
+  font-size: 25px;
 }
