@@ -21,7 +21,7 @@ library(fontawesome)
 |Nª   |Fecha       |Presentación                                                           |Material                                                                                                   |Solución                                                                                              | 
 |:---:|:---:       |:---:                                                                  |:---:                                                                                                      |:---:                                                                                                 |
 |1    |`2019-25-03`|[`r fa("file-powerpoint", fill = "red")`](xaringan/enmec_t1/index.html)|[`r fa("file-archive", fill = "forestgreen")`](https://www.dropbox.com/s/mmil33cylowumkz/material.zip?dl=1)|[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/gjr3cvgphlue3at/solution.zip?dl=1)|
-|2    |`2019-15-04`|[`r fa("file-powerpoint", fill = "red")`](xaringan/enmec_t3/index.html)|`r fa("file-archive", fill = "forestgreen")`                                                               |`r fa("r-project", fill = "steelblue")`                                                               |
+|2    |`2019-15-04`|[`r fa("file-powerpoint", fill = "red")`](xaringan/enmec_t3/index.html)|`r fa("times-circle", fill = "black")`                                                                     |`r fa("times-circle", fill = "black")`                                                                |
 
 ---
 
@@ -31,6 +31,6 @@ library(fontawesome)
  
 |Nª   |Fecha       |Presentación                                                        |Material                                                                                                   |Solución                                                                                             |
 |:---:|:---:       |:---:                                                               |:---:                                                                                                      |:---:                                                                                                |  
-|1    |`2019-14-03`|[`r fa("file-powerpoint", fill = "red")`](beamer/enfin_t1/index.pdf)|`r fa("times-circle", fill = "red")`                                                                       |[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/n5y23tgtjkp82yp/script_t1.R?dl=1)| 
+|1    |`2019-14-03`|[`r fa("file-powerpoint", fill = "red")`](beamer/enfin_t1/index.pdf)|`r fa("times-circle", fill = "black")`                                                                     |[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/n5y23tgtjkp82yp/script_t1.R?dl=1)| 
 |2    |`2019-25-03`|[`r fa("file-powerpoint", fill = "red")`](beamer/enfin_t2/index.pdf)|[`r fa("file-archive", fill = "forestgreen")`](https://www.dropbox.com/s/arpjstf934w1v9d/material.zip?dl=1)|[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/3kjy65jgvzis3ab/script_t2.R?dl=1)| 
 
