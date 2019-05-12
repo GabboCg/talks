@@ -4,7 +4,7 @@ subtitle: "Trasladando el análisis financiero al Tidyverse"
 author: 'Gabriel Cabrera <br> Universidad de Chile <br><br> <a href="https://github.com/GaboCg"><i class="fa fa-github fa-fw"></i>&nbsp; GaboCg </a><br> <a href="https://twitter.com/GaboC_g"> <i class="fa fa-twitter fa-fw"></i>&nbsp; @GaboC_g</a><br> <a href="mailto:gcabrerag@fen.uchile.cl"><i class="fa fa-paper-plane fa-fw"></i>&nbsp; gcabrerag@fen.uchile.cl</a><br>'
 output:
   xaringan::moon_reader:
-    css: ["default", "css/my-theme.css", "css/my-fonts.css", "hygge"]
+    css: ["default", "css/my-theme.css", "css/my-fonts.css", "hygge", "css/animate.css"]
     lib_dir: libs
     nature:
       highlightStyle: github
@@ -37,6 +37,7 @@ class: center, inverse, middle
 # Breve historia
 
 ---
+
 background-image: url(https://business-science.github.io/tidyquant/reference/figures/tidyquant-logo.png)
 background-size: 80px
 background-position: 97% 5%
