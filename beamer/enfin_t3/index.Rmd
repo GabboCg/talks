@@ -71,70 +71,68 @@ Donde:
 Considere el siguiente ejercicio: Calcular el precio de un bono con pago de cupón semestral, Madurez 25 años, Tasa cupón 6.5%, Yield semi-anual de 6.9% y Valor nominal de 100. Para desarrollar el ejercicio, vamos a construir por parte los componentes de nuestro bono.
 
 1. Construimos tanto la tasa cupón como la *Yield semi-anual*.
+    
+    ```{r}
+    tc <- 0.065
+    y  <- 0.069
+    ```
 
-
-```{r}
-tc <- 0.065
-y  <- 0.069
-```
 2. Construimos un vector con los valores de los cupones más el principal
-
-
-```{r}
-pago <- c(rep(tc*100/2,49),(100 + tc*100/2))
-```
-
-
-tanto ``tc``, ``r`` y ``pago`` se encontraran en *Values* del *global environment*, en tipo ``numeric``.
+    
+    ```{r}
+    pago <- c(rep(tc*100/2,49),(100 + tc*100/2))
+    ```
+    
+    tanto ``tc``, ``r`` y ``pago`` se encontraran en *Values* del *global environment*, en tipo ``numeric``.
 
 
 ## 
 
 3. Para poder trabajar con nuestra base de datos, transformamos nuestro vector ``pago`` que está en forma ``numeric`` a ``data frame``. 
 
-
-```{r}
-pago <- as.data.frame(pago)
-```
-
-Ahora existe un objeto con estructuración de datos ``data frame`` en nuestro global environment. Se podría haber llamado de cualquier forma a nuestro nuevo objeto ``pago``.
+    
+    ```{r}
+    pago <- as.data.frame(pago)
+    ```
+    
+    Ahora existe un objeto con estructuración de datos ``data frame`` en nuestro global environment. Se podría haber llamado de cualquier forma a nuestro nuevo objeto ``pago``.
 
 
 ## Precio de un Bono: Dos formas de hacer lo mismo
 
 Ya construido nuestro objeto ``pago`` veremos que en **R** existen muchas formas de hacer lo mismo:
 
-1. \justifying
-Al principio de la sesión cargamos la libreria ``tidyverse``, está nos permitirá trabajar con un "megapaquete" que incluye otros paquetes en su interior (ggplot2, dplyr, magittr, entre otros). Todos los paquetes que conforman "el Tidyverse" comparten la misma visión sobre el trabajo con datos y la escritura de código. Si va a la pestaña packages y escribe ``dplyr`` verá que está activa, pero nunca la "llamamos", esto se debe a ``tidyverse`` lo hizo por nosotros.
-
-
-```{r}
-pago1 <- pago %>% 
-         mutate(t1 = as.numeric(index(pago)),factor_desc = 1/(1+y/2)^(t1),
-                val_present = pago*factor_desc) %>% 
-         summarise(sum(val_present))
-pago1
-```
+1. Al principio de la sesión cargamos la libreria ``tidyverse``, está nos permitirá trabajar con un "megapaquete" que incluye otros paquetes en su interior (ggplot2, dplyr, magittr, entre otros). Todos los paquetes que conforman "el Tidyverse" comparten la misma visión sobre el trabajo con datos y la escritura de código. Si va a la pestaña packages y escribe ``dplyr`` verá que está activa, pero nunca la "llamamos", esto se debe a ``tidyverse`` lo hizo por nosotros.
+    
+    
+    ```{r}
+    pago1 <- pago %>% 
+             mutate(t1 = as.numeric(index(pago)),factor_desc = 1/(1+y/2)^(t1),
+                    val_present = pago*factor_desc) %>% 
+             summarise(sum(val_present))
+    pago1
+    ```
 
 
 ##
 
 2. La otra forma es: 
+    
+    ```{r}
+    # replicamos el objeto
+    pago2 <- pago
+    
+    pago2$t2 <- as.numeric(rownames(pago2))
+    
+    # Calculamos el factor de descuento
+    pago2$factor_desc <- 1 / (1 + y/2)^(pago2$t2)
+    # Calculamos el valor presente
+    pago2$val_present <-  pago2$factor_desc*pago2$pago
+    # Calculamos el precio
+    sum(pago2$val_present)
+    
+    ```
 
-```{r}
-# replicamos el objeto
-pago2 <- pago
-
-pago2$t2 <- as.numeric(rownames(pago2))
-
-# Calculamos el factor de descuento
-pago2$factor_desc <- 1 / (1 + y/2)^(pago2$t2)
-# Calculamos el valor presente
-pago2$val_present <-  pago2$factor_desc*pago2$pago
-# Calculamos el precio
-sum(pago2$val_present)
-
-```
 # Otra cosa es con funciones
 
 ## Otra cosa es con funciones
@@ -217,14 +215,7 @@ g1 <- g1 + geom_ribbon(aes(ymin = 0, ymax = pmax(precio,0)), fill="pink",
 g1 <- g1 + theme_bw() 
 g1 <- g1 + theme(panel.border = element_rect(colour = "black", fill = NA, size = .5),
                  panel.grid.major = element_line(colour = "#d3d3d3"))    
-g1
 ```
-
-```r
-# Guarmados gráfico
-ggsave("retorno-yield.png",width = 8.5, height = 4.5, dpi = 300)
-```
-
 ## 
 
 ```{r, eval = TRUE, echo = FALSE, fig.align= "center", fig.width= 6, fig.height=3}
@@ -287,23 +278,20 @@ chartSeries(t10yr, theme = "white")
 ##
 
 ```r
-t10yr.df <- as.data.frame(t10yr)
+t10yr_df <- as.data.frame(t10yr)
 
-t10yr.df <- t10yr.df %>% 
+t10yr_df <- t10yr.df %>% 
             mutate(fecha = as.Date(rownames(t10yr.df))) %>% 
             na.omit()
 
-g3 <- ggplot(data = t10yr.df,aes(x = fecha , y = DGS10)) + geom_line(size = 1, color = "green")
-g3 <- g3 + ggtitle("10-Year US Treasury Yields", subtitle = "Desde 2000-01-01 hasta 2018-04-17")
+g3 <- ggplot(data = t10yr.df,aes(x = fecha , y = DGS10)) + geom_line(size = 1, 
+                                                                     color = "green")
+g3 <- g3 + ggtitle("10-Year US Treasury Yields", 
+                   subtitle = "Desde 2000-01-01 hasta 2018-04-17")
 g3 <- g3 + ylab("Fecha") +xlab("Yield(%)") 
-g3 <- g3 + theme_bw() + theme(panel.border = element_rect(colour = "black", fill = NA, size = .5),
+g3 <- g3 + theme_bw() + theme(panel.border = element_rect(colour = "black", 
+                                                          fill = NA, size = .5),
                               panel.grid.major = element_line(colour = "#d3d3d3"))
-g3
-```
-
-```r
-# Guarmados gráfico
-ggsave("treasury-yields.png",width = 8.5, height = 4.5, dpi = 300)
 ```
 
 ##
@@ -342,7 +330,8 @@ Existen dos Duraciones, la de Macaulay y modificada (o de Hicks), las que miden 
 
 \vspace{10pt}
 
-**Macaulay**:
+**Macaulay** [@smith2014bond]:
+
 $$
 \text{Duración de Macaulay} =\bigg[ \frac{1 + y}{y} - \frac{1+y + [n \cdot (c - y)]}{[ c\cdot((1+y)^n - 1)]+y} \bigg]
 $$
@@ -466,6 +455,7 @@ convexidad(100, 0.03, 10, t10yr_yield, precio.bono(p = 100, tc = 0.03, t = 10,
 ##
 
 Aproximación Convexidad:
+
 ```{r}
 # Calculamos medida de convexidad
 convexidad <- (precio.arriba + precio.abajo  - 2 * precio)/(precio * (0.01)^2)
@@ -523,11 +513,11 @@ a. Calcule el precio del Bono
     
     ```{r, message=FALSE}
     yield <- getSymbols(Symbols = "DAAA", src = "FRED", auto.assign = FALSE)
-    yield <- as.numeric(subset(yield["2016-09-30"]))/1200
+    yield <- as.numeric(subset(yield["2016-09-30"]))*0.01
     ```
     
     ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-    knitr::kable(as_tibble(round(yield, 4)) %>% rename(Yield=value))
+    knitr::kable(as_tibble(round(yield, 4)) %>% rename(Yield=value), align = "c")
     ```
     
 ## 

@@ -336,6 +336,9 @@ $if(institute)$\institute[]{$institute$}$endif$
  \setbeamercolor{block body}{parent=normal text,use=block title,bg=block title.bg!50!bg, fg=black}
 }
 
+\apptocmd{\frame}{}{\justifying}{}
+\renewcommand{\raggedright}{\leftskip=0pt \rightskip=0pt plus 0cm}
+
 \begin{document}
 
 $if(title)$
