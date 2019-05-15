@@ -330,20 +330,28 @@ Existen dos Duraciones, la de Macaulay y modificada (o de Hicks), las que miden 
 
 \vspace{10pt}
 
-**Macaulay** [@smith2014bond]:
+**Macaulay Forma 1**  [@smith2014bond]:
+$$
+\bigg[ \frac{1 + y}{y} - \frac{1+y + [n \cdot (c - y)]}{[ c\cdot((1+y)^n - 1)]+y} \bigg]
+$$
 
+**Macaulay Forma 2**:
 $$
-\text{Duración de Macaulay} =\bigg[ \frac{1 + y}{y} - \frac{1+y + [n \cdot (c - y)]}{[ c\cdot((1+y)^n - 1)]+y} \bigg]
+\frac{1}{P} \sum_{t=1}^{T} \bigg[ \frac{CF_{t}}{(1 + y)^t } \times t \bigg]
 $$
+
+## 
 
 **Modificada**:
 $$
-\text{Duración Modificada} = \text{Duración de Macaulay}/(1+y)
+\text{Duración de Macaulay}/(1+y)
 $$
+
+\vspace{1cm}
 
 **Aprox. Duración Modificada**:
 $$
-Aprox.Dur.Mod.= \frac{MV_{-}-MV_{+}}{2 \cdot \Delta y \cdot MV_{0}}
+\frac{MV_{-}-MV_{+}}{2 \cdot \Delta y \cdot MV_{0}}
 $$
 
 
