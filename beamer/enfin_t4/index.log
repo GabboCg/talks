@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.5.24)  2 JUN 2019 15:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.5.24)  2 JUN 2019 17:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1944,15 +1944,10 @@ Package pdftex.def Info: logo-u-de-chile.png  used on input line 1251.
 ]
 \openout4 = `index.vrb'.
 
-(./index.vrb
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 9.
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 9.
-)
+(./index.vrb)
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1282.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1281.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 [51
 
@@ -1962,7 +1957,7 @@ Package pdftex.def Info: logo-u-de-chile.png  used on input line 1282.
 (./index.vrb)
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1319.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1318.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 [52
 
@@ -1972,7 +1967,7 @@ Package pdftex.def Info: logo-u-de-chile.png  used on input line 1319.
 (./index.vrb)
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1339.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1338.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 [53
 
@@ -1991,7 +1986,7 @@ Package pdftex.def Info: logo-u-de-chile.png  used on input line 1339.
 ]
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1419.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1420.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 [57
 
@@ -2001,7 +1996,7 @@ Package pdftex.def Info: logo-u-de-chile.png  used on input line 1419.
 (./index.vrb)
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1437.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1438.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 [58
 
@@ -2011,29 +2006,29 @@ Package pdftex.def Info: logo-u-de-chile.png  used on input line 1437.
 (./index.vrb)
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1459.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1460.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 [59
 
 ]
-<index_files/figure-beamer/unnamed-chunk-40-1.pdf, id=1818, 433.62pt x 234.8775
+<index_files/figure-beamer/unnamed-chunk-40-1.pdf, id=1816, 433.62pt x 234.8775
 pt>
 File: index_files/figure-beamer/unnamed-chunk-40-1.pdf Graphic file (type pdf)
 <use index_files/figure-beamer/unnamed-chunk-40-1.pdf>
 Package pdftex.def Info: index_files/figure-beamer/unnamed-chunk-40-1.pdf  used
- on input line 1468.
+ on input line 1469.
 (pdftex.def)             Requested size: 433.61894pt x 234.87692pt.
 
-Overfull \hbox (0.27492pt too wide) in paragraph at lines 1468--1468
+Overfull \hbox (0.27492pt too wide) in paragraph at lines 1469--1469
  [] 
  []
 
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1468.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1469.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 
-Overfull \vbox (18.68623pt too high) detected at line 1468
+Overfull \vbox (18.68623pt too high) detected at line 1469
  []
 
 [60
@@ -2044,29 +2039,29 @@ Overfull \vbox (18.68623pt too high) detected at line 1468
 (./index.vrb)
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1491.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1492.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 [61
 
 ]
-<index_files/figure-beamer/unnamed-chunk-42-1.pdf, id=1883, 433.62pt x 230.8625
+<index_files/figure-beamer/unnamed-chunk-42-1.pdf, id=1881, 433.62pt x 230.8625
 pt>
 File: index_files/figure-beamer/unnamed-chunk-42-1.pdf Graphic file (type pdf)
 <use index_files/figure-beamer/unnamed-chunk-42-1.pdf>
 Package pdftex.def Info: index_files/figure-beamer/unnamed-chunk-42-1.pdf  used
- on input line 1500.
+ on input line 1501.
 (pdftex.def)             Requested size: 433.61894pt x 230.86192pt.
 
-Overfull \hbox (0.27492pt too wide) in paragraph at lines 1500--1500
+Overfull \hbox (0.27492pt too wide) in paragraph at lines 1501--1501
  [] 
  []
 
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1500.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1501.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 
-Overfull \vbox (14.67123pt too high) detected at line 1500
+Overfull \vbox (14.67123pt too high) detected at line 1501
  []
 
 [62
@@ -2074,14 +2069,14 @@ Overfull \vbox (14.67123pt too high) detected at line 1500
  <./index_files/figure-beamer/unnamed-chunk-42-1.pdf>]
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1511.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1512.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 [63
 
 ]
 File: logo-u-de-chile.png Graphic file (type png)
 <use logo-u-de-chile.png>
-Package pdftex.def Info: logo-u-de-chile.png  used on input line 1514.
+Package pdftex.def Info: logo-u-de-chile.png  used on input line 1515.
 (pdftex.def)             Requested size: 18.49411pt x 18.4865pt.
 [64
 
@@ -2098,11 +2093,11 @@ Package pdftex.def Info: logo-u-de-chile.png  used on input line 1514.
 \tf@snm=\write10
 \openout10 = `index.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1521.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1521.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1522.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1522.
 (./index.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1521.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1521.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1522.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1522.
 
 Package rerunfilecheck Info: File `index.out' has not changed.
 (rerunfilecheck)             Checksum: 9D737FF0D65309D5D302E0FE9C00D5D6;269.
@@ -2117,41 +2112,39 @@ Package logreq Info: Writing requests to 'index.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 28620 strings out of 494562
- 536196 string characters out of 6177143
+ 28606 strings out of 494562
+ 536045 string characters out of 6177143
  949417 words of memory out of 5000000
- 31444 multiletter control sequences out of 15000+600000
- 60318 words of font info for 63 fonts, out of 8000000 for 9000
+ 31434 multiletter control sequences out of 15000+600000
+ 50629 words of font info for 55 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  48i,15n,72p,791b,1918s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/home/gabriel/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/home/ga
-briel/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/gabriel/.Tiny
-TeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/gabriel/.TinyTeX/texmf-dist/
-fonts/enc/dvips/lm/lm-rm.enc}{/home/gabriel/.TinyTeX/texmf-dist/fonts/enc/dvips
+{/home/gabriel/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/gabrie
+l/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/gabriel/.TinyTeX/
+texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/gabriel/.TinyTeX/texmf-dist/font
+s/enc/dvips/lm/lm-mathsy.enc}{/home/gabriel/.TinyTeX/texmf-dist/fonts/enc/dvips
 /base/8r.enc}{/home/gabriel/.TinyTeX/texmf-dist/fonts/enc/dvips/fontawesome/fon
 tawesomethree.enc}{/home/gabriel/.TinyTeX/texmf-dist/fonts/enc/dvips/fontawesom
 e/fontawesometwo.enc}{/home/gabriel/.TinyTeX/texmf-dist/fonts/enc/dvips/fontawe
 some/fontawesomeone.enc}</home/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/f
 ontawesome/FontAwesome.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/publi
-c/lm/lmmi10.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.
-pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></home/g
-abriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss10.pfb></home/gabriel/.Tin
-yTeX/texmf-dist/fonts/type1/public/lm/lmss12.pfb></home/gabriel/.TinyTeX/texmf-
-dist/fonts/type1/public/lm/lmss8.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/t
-ype1/public/lm/lmssbx10.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/publ
-ic/lm/lmsso10.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss
-o8.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></ho
-me/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></home/gabriel/.
-TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></home/gabriel/.TinyTeX/texm
-f-dist/fonts/type1/public/lm/lmtt10.pfb></home/gabriel/.TinyTeX/texmf-dist/font
-s/type1/public/lm/lmtt8.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/urw/
-courier/ucrb8a.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/urw/courier/u
-crr8a.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrro8a.pf
-b>
-Output written on index.pdf (65 pages, 707804 bytes).
+c/lm/lmmi10.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.
+pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss10.pfb></home/
+gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss12.pfb></home/gabriel/.Ti
+nyTeX/texmf-dist/fonts/type1/public/lm/lmss8.pfb></home/gabriel/.TinyTeX/texmf-
+dist/fonts/type1/public/lm/lmssbx10.pfb></home/gabriel/.TinyTeX/texmf-dist/font
+s/type1/public/lm/lmsso10.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/pu
+blic/lm/lmsso8.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lms
+y10.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></ho
+me/gabriel/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></home/gabriel/
+.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></home/gabriel/.TinyTeX/tex
+mf-dist/fonts/type1/urw/courier/ucrb8a.pfb></home/gabriel/.TinyTeX/texmf-dist/f
+onts/type1/urw/courier/ucrr8a.pfb></home/gabriel/.TinyTeX/texmf-dist/fonts/type
+1/urw/courier/ucrro8a.pfb>
+Output written on index.pdf (65 pages, 701191 bytes).
 PDF statistics:
- 2120 PDF objects out of 2487 (max. 8388607)
- 1973 compressed objects within 20 object streams
+ 2112 PDF objects out of 2487 (max. 8388607)
+ 1967 compressed objects within 20 object streams
  191 named destinations out of 1000 (max. 500000)
  184 words of extra memory for PDF output out of 10000 (max. 10000000)
 

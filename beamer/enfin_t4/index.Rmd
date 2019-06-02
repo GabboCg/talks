@@ -774,7 +774,7 @@ e. \justifying Finalmente seleccionamos las que están cerca al *at the money* y
 
 ## Black & Scholes con Datos Reales: Parte a
 
-Imaginemos que es 31 de mayo del 2018 y queremos valorar las opciones call y put de [Oracle](https://www.oracle.com/index.html) con vencimiento al 17 de Agosto del 2018. Para comenzar usamos la función `getOptionChain()` de la librería `quantmod`:  
+Imaginemos que es 31 de mayo del 2019 y queremos valorar las opciones call y put de [Oracle](https://www.oracle.com/index.html) con vencimiento al 20 de Septiembre del 2019. Para comenzar usamos la función `getOptionChain()` de la librería `quantmod`:  
 
 
 ```{r,eval=TRUE,echo=TRUE,message=FALSE}
@@ -788,14 +788,14 @@ puts  <- opciones$puts[,c(1:2,4:6)]
 
 ## Black & Scholes con Datos Reales: Parte b
 
-Como debemos obtener el precio de cierre para el 31 de mayo del 2018 y a su vez el histórico de tres años para la volatilidad usamos:  
+Como debemos obtener el precio de cierre para el 31 de mayo del 2019 y a su vez el histórico de tres años para la volatilidad usamos:  
 
 ```{r,eval=TRUE,echo=TRUE,message=FALSE}
-# Al 31 de mayo la valuación, 31 de mayo del 2015 fue domingo, por ende, usamos el viernes 29
-getSymbols("ORCL", from = "2015-05-29", to = "2018-06-01", periodicity = "daily")
+
+getSymbols("ORCL", from = "2016-06-30", to = "2019-06-01", periodicity = "daily")
 
 orcl <- as.data.frame(ORCL) %>%  # a data.frame 
-        mutate(ret = log(ORCL.Adjusted/lag(ORCL.Adjusted))) %>%  # retorno
+        mutate(ret = log(ORCL.Adjusted/dplyr::lag(ORCL.Adjusted))) %>%  # retorno
         select(ORCL.Adjusted,ret) %>% # Seleccionamos el retorno y precio de ajuste
         na.omit() # por el NA que se produce del retorno
 
@@ -808,12 +808,12 @@ precio <- tail(orcl$ORCL.Adjusted,1)
 Con la función `getSymbols` usamos la fuente de la FRED y extraemos la rf con `subset`.  
 
 ```{r,eval=TRUE,echo=TRUE,message=FALSE}
-getSymbols("DGS3MO",src ="FRED", to = "2018-06-01", periodicity = "daily")
+getSymbols("DGS3MO",src ="FRED", to = "2019-06-01", periodicity = "daily")
 
-rf <- as.numeric(subset(DGS3MO["2018-05-31"]))*0.01 
+rf <- as.numeric(subset(DGS3MO["2019-05-30"]))*0.01 
 
-expiracion.date <- as.Date("2018-08-17")
-valuacion.date <- as.Date("2018-06-01")
+expiracion.date <- as.Date("2019-09-20")
+valuacion.date <- as.Date("2019-05-31")
 TTM <- as.numeric((expiracion.date-valuacion.date)/365)
 ```
 
@@ -828,30 +828,31 @@ vol.hist <- sd(orcl$ret)*sqrt(252)
 Vemos el precio a la fecha la valuación y seleccionamos aquellas cercana a estar *at the money*, tanto put como call.
 
 ```{r,eval=TRUE,echo=TRUE}
-
 bs.call <- calls %>% 
-           dplyr::filter(Strike == 45 | Strike == 50) %>% 
+           dplyr::filter(Strike == 46 | Strike == 51) %>% 
            select(Strike,Last,Bid,Ask)
 
 bs.put <- puts %>% 
-          dplyr::filter(Strike == 45 | Strike == 50) %>% 
+          dplyr::filter(Strike == 46 | Strike == 51) %>% 
           select(Strike,Last,Bid,Ask)
 ```
 
 ## 
 ```{r,eval=TRUE,echo=TRUE}
 # call
-GBSOption(TypeFlag = "c", S = precio, X = 45, Time = TTM, r = rf, b = rf, 
+GBSOption(TypeFlag = "c", S = precio, X = 46, Time = TTM, r = rf, b = rf, 
           sigma = vol.hist)@price
-GBSOption(TypeFlag = "c", S = precio, X = 50, Time = TTM, r = rf, b = rf, 
+GBSOption(TypeFlag = "c", S = precio, X = 51, Time = TTM, r = rf, b = rf, 
           sigma = vol.hist)@price
 ```
 
 ##
 ```{r,eval=TRUE,echo=TRUE}
 # put
-GBSOption(TypeFlag = "p", S = precio, X = 45, Time = TTM, r = rf, b = rf, sigma = vol.hist)@price
-GBSOption(TypeFlag = "p", S = precio, X = 50, Time = TTM, r = rf, b = rf, sigma = vol.hist)@price
+GBSOption(TypeFlag = "p", S = precio, X = 46, Time = TTM, r = rf, b = rf, 
+          sigma = vol.hist)@price
+GBSOption(TypeFlag = "p", S = precio, X = 51, Time = TTM, r = rf, b = rf, 
+          sigma = vol.hist)@price
 ```
 
 # Árbol Binomial
