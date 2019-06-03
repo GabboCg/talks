@@ -252,51 +252,52 @@ GBSOption(TypeFlag = "c", S = S0, X = K, Time = T, r = r, b = r, sigma = sigma)@
 # Con libreria put
 GBSOption(TypeFlag = "p", S = S0, X = K, Time = T, r = r, b = r, sigma = sigma)@price
 
-opciones <- getOptionChain("ORCL",Exp="2019-09-20")
+opciones <- getOptionChain("ORCL", Exp="2019-09-20")
 
 # Nos quedamos con las columnas del 1 al 2 y del 4 al 6.
 calls <- opciones$calls[,c(1:2,4:6)]
 # Nos quedamos con las columnas del 1 al 2 y del 4 al 6.
 puts  <- opciones$puts[,c(1:2,4:6)] 
 
-# Al 31 de mayo la valuación, 31 de mayo del 2015 fue domingo, por ende, usamos el viernes 29
-getSymbols("ORCL", from = "2015-05-29", to = "2018-06-01", periodicity = "daily")
+getSymbols("ORCL", from = "2016-06-30", to = "2019-06-01", periodicity = "daily")
 
 orcl <- as.data.frame(ORCL) %>%  # a data.frame 
-        mutate(ret = log(ORCL.Adjusted/lag(ORCL.Adjusted))) %>%  # retorno
-        select(ORCL.Adjusted,ret) %>% # Seleccionamos el retorno y precio de ajuste
-        na.omit() # por el NA que se produce del retorno
+  mutate(ret = log(ORCL.Adjusted/dplyr::lag(ORCL.Adjusted))) %>%  # retorno
+  select(ORCL.Adjusted,ret) %>% # Seleccionamos el retorno y precio de ajuste
+  na.omit() # por el NA que se produce del retorno
 
 # extraemos el precio a la fecha que nos piden
 precio <- tail(orcl$ORCL.Adjusted,1)
 
-getSymbols("DGS3MO",src ="FRED", to = "2018-06-01", periodicity = "daily")
+getSymbols("DGS3MO",src ="FRED", to = "2019-06-01", periodicity = "daily")
 
-rf <- as.numeric(subset(DGS3MO["2018-05-31"]))*0.01 
+rf <- as.numeric(subset(DGS3MO["2019-05-30"]))*0.01 
 
-expiracion.date <- as.Date("2018-08-17")
-valuacion.date <- as.Date("2018-06-01")
+expiracion.date <- as.Date("2019-09-20")
+valuacion.date <- as.Date("2019-05-31")
 TTM <- as.numeric((expiracion.date-valuacion.date)/365)
 
 vol.hist <- sd(orcl$ret)*sqrt(252)
 
 bs.call <- calls %>% 
-           dplyr::filter(Strike == 45 | Strike == 50) %>% 
-           select(Strike,Last,Bid,Ask)
+  dplyr::filter(Strike == 46 | Strike == 51) %>% 
+  select(Strike,Last,Bid,Ask)
 
 bs.put <- puts %>% 
-          dplyr::filter(Strike == 45 | Strike == 50) %>% 
-          select(Strike,Last,Bid,Ask)
+  dplyr::filter(Strike == 46 | Strike == 51) %>% 
+  select(Strike,Last,Bid,Ask)
 
 # call
-GBSOption(TypeFlag = "c", S = precio, X = 45, Time = TTM, r = rf, b = rf, 
+GBSOption(TypeFlag = "c", S = precio, X = 46, Time = TTM, r = rf, b = rf, 
           sigma = vol.hist)@price
-GBSOption(TypeFlag = "c", S = precio, X = 50, Time = TTM, r = rf, b = rf, 
+GBSOption(TypeFlag = "c", S = precio, X = 51, Time = TTM, r = rf, b = rf, 
           sigma = vol.hist)@price
 
 # put
-GBSOption(TypeFlag = "p", S = precio, X = 45, Time = TTM, r = rf, b = rf, sigma = vol.hist)@price
-GBSOption(TypeFlag = "p", S = precio, X = 50, Time = TTM, r = rf, b = rf, sigma = vol.hist)@price
+GBSOption(TypeFlag = "p", S = precio, X = 46, Time = TTM, r = rf, b = rf, 
+          sigma = vol.hist)@price
+GBSOption(TypeFlag = "p", S = precio, X = 51, Time = TTM, r = rf, b = rf, 
+          sigma = vol.hist)@price
 
 library("fOptions")
 

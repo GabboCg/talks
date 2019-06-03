@@ -808,6 +808,7 @@ precio <- tail(orcl$ORCL.Adjusted,1)
 Con la función `getSymbols` usamos la fuente de la FRED y extraemos la rf con `subset`.  
 
 ```{r,eval=TRUE,echo=TRUE,message=FALSE}
+
 getSymbols("DGS3MO",src ="FRED", to = "2019-06-01", periodicity = "daily")
 
 rf <- as.numeric(subset(DGS3MO["2019-05-30"]))*0.01 
@@ -929,6 +930,14 @@ BinomialTreePlot(CRRTree.1, dy = 1, cex = 0.8, ylim = c(-6, 7), xlab = "n", ylab
 title(main = "Arbol Binomial Opción")
 ```
 
+
+## Videos \faVideoCamera
+
+1. [\faYoutubePlay](https://youtu.be/b54LK6TRjws) Black & Sholes 
+
+2. [\faYoutubePlay](https://youtu.be/Qz8pdhf7yyU) Black & Sholes: Con datos reales
+
+3. [\faYoutubePlay](https://youtu.be/2LCceV1-4Yg) Árbol Binomial 
 
 ## Apunte del curso
 
