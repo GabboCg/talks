@@ -1,0 +1,11 @@
+highchart(type = "stock") %>%
+  hc_title(text = "Retornos Mensuales del Portafolio") %>%
+  hc_add_series(portfolio_returns_monthly %>% 
+                  timetk::tk_xts(),
+                name = "Rebalanceado Mensuales",
+                color = "cornflowerblue") %>%
+  hc_add_theme(hc_theme_flat()) %>%
+  hc_navigator(enabled = FALSE) %>%
+  hc_scrollbar(enabled = FALSE) %>%
+  hc_legend(enabled = TRUE) %>%
+  hc_exporting(enabled = TRUE)

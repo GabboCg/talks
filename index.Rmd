@@ -12,27 +12,37 @@ knitr::opts_chunk$set(echo = TRUE)
 library(fontawesome)
 ```
 
-![](https://escudouchile.files.wordpress.com/2012/06/logo-facultad-de-economc3ada-y-negocios-universidad-de-chile.png)
+<center>
+<img src="https://escudouchile.files.wordpress.com/2012/06/logo-facultad-de-economc3ada-y-negocios-universidad-de-chile.png" alt="Smiley face" width="500" height="500">
+</center>
 
 # **Presentaciones ENMEC357**
   
-<p>  
+<p>
+
+<div align="center">
                                                                                                                                                                  
 |Nª   |Fecha       |Presentación                                                           |Material                                                                                                   |Solución                                                                                                      | 
 |:---:|:---:       |:---:                                                                  |:---:                                                                                                      |:---:                                                                                                         |
-|1    |`2019-25-03`|[`r fa("file-powerpoint", fill = "red")`](xaringan/enmec_t1/index.html)|[`r fa("file-archive", fill = "forestgreen")`](https://www.dropbox.com/s/mmil33cylowumkz/material.zip?dl=1)|[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/gjr3cvgphlue3at/solution.zip?dl=1)        |
-|2    |`2019-15-04`|[`r fa("file-powerpoint", fill = "red")`](xaringan/enmec_t3/index.html)|`r fa("times-circle", fill = "black")`                                                                     |[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/903d3leh7yji3we/tidyquant_examples.R?dl=1)|
+|1    |`2019-04-08`|[`r fa("file-powerpoint", fill = "red")`](xaringan/enmec_t0/index.html)|`r fa("times-circle", fill = "black")`|[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/gjr3cvgphlue3at/solution.zip?dl=1)        |
+|2    |`2019-25-03`|[`r fa("file-powerpoint", fill = "red")`](xaringan/enmec_t1/index.html)|[`r fa("file-archive", fill = "forestgreen")`](https://www.dropbox.com/s/mmil33cylowumkz/material.zip?dl=1)|[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/gjr3cvgphlue3at/solution.zip?dl=1)        |
+|3    |`2019-15-04`|[`r fa("file-powerpoint", fill = "red")`](xaringan/enmec_t3/index.html)|`r fa("times-circle", fill = "black")`                                                                     |[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/903d3leh7yji3we/tidyquant_examples.R?dl=1)|
+
+</div>
 
 ---
 
-# **Presentaciones ENFIN415**
+# **Presentaciones ENFIN415** (*Cerrado*)
 
 <p>                 
- 
+
+<div align="center">
+
 |Nª   |Fecha       |Presentación                                                        |Material                                                                                                           |Solución                                                                                             |
 |:---:|:---:       |:---:                                                               |:---:                                                                                                              |:---:                                                                                                |  
 |1    |`2019-14-03`|[`r fa("file-powerpoint", fill = "red")`](beamer/enfin_t1/index.pdf)|`r fa("times-circle", fill = "black")`                                                                             |[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/n5y23tgtjkp82yp/script_t1.R?dl=1)| 
 |2    |`2019-25-03`|[`r fa("file-powerpoint", fill = "red")`](beamer/enfin_t2/index.pdf)|[`r fa("file-archive", fill = "forestgreen")`](https://www.dropbox.com/s/arpjstf934w1v9d/material.zip?dl=1)        |[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/3kjy65jgvzis3ab/script_t2.R?dl=1)| 
 |3    |`2019-13-05`|[`r fa("file-powerpoint", fill = "red")`](beamer/enfin_t3/index.pdf)|[`r fa("file-archive", fill = "forestgreen")`](https://www.dropbox.com/s/ym7ejs4docpecv2/ejercicio_excel.xlsx?dl=1)|[`r fa("r-project", fill = "steelblue")`](https://www.dropbox.com/s/npg9q4gphuch8w9/script_t3.R?dl=1)|
-|4    |`2019-03-06`|[`r fa("file-powerpoint", fill = "red")`](beamer/enfin_t4/index.pdf)|`r fa("times-circle", fill = "black")`                                                                              |`r fa("r-project", fill = "steelblue")`
-                                                            |
+|4    |`2019-03-06`|[`r fa("file-powerpoint", fill = "red")`](beamer/enfin_t4/index.pdf)|`r fa("times-circle", fill = "black")`                                                                              |`r fa("r-project", fill = "steelblue")`|                                                            |
+                                                            
+</div>

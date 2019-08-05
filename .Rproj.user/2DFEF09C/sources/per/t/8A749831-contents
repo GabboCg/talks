@@ -1,0 +1,64 @@
+---
+title: "R Markdown"
+subtitle: "Un enfoque a la investigación reproducible"
+author: 'Gabriel Cabrera <br> Universidad de Chile <br><br> <a href="https://github.com/GaboCg"><i class="fa fa-github fa-fw"></i>&nbsp; GaboCg </a><br> <a href="https://twitter.com/GaboC_g"> <i class="fa fa-twitter fa-fw"></i>&nbsp; @GaboC_g</a><br> <a href="mailto:gcabrerag@fen.uchile.cl"><i class="fa fa-paper-plane fa-fw"></i>&nbsp; gcabrerag@fen.uchile.cl</a><br>'
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/my-theme.css", "css/my-fonts.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      ratio: '16:9'
+    includes:
+      in_header: header.html 
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+class: middle
+
+<blockquote cite="http://www.worldwildlife.org/who/index.html">
+
+"Wealth consists not in having great possessions, but in having few wants."
+
+<p align="right"> Epicteto,<i> Filosofo Griego </i>.</p>
+
+</blockquote>
+
+---
+class: center, inverse, middle
+
+# Breve historia
+
+---
+
+background-image: url(http://hexb.in/hexagons/rmarkdown.png)
+background-size: 80px
+background-position: 97% 5%
+
+# Paquete R Markdown
+
+```{r, echo=FALSE}
+library("reticulate")
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+
+range(3)
+
+print_example = "No todo lo que brilla es oro"
+print(print_example)
+
+animals = ['cat', 'dog', 'monkey']
+for animal in animals:
+    print(animal)
+```
+
+

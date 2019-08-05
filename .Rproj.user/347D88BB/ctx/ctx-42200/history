@@ -1,0 +1,512 @@
+y <- sprintf("{point.%s:.2f}", c("returns"))
+hchart(portfolio_returns_monthly,
+"scatter",
+hcaes(x = date,
+y = returns*100,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}")),
+pointFormat = tltip) %>%
+hc_add_theme(hc_theme_smpl())
+library("highcharter")
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}", c("returns"))
+tltip <- tooltip_table(x, y)
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}")),
+pointFormat = tltip) %>%
+hc_add_theme(hc_theme_smpl())
+library("highcharter")
+y <- c("Retorno")
+x <- sprintf("{point.%s:.2f}", c("returns"))
+tltip <- tooltip_table(x, y)
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}")),
+pointFormat = tltip) %>%
+hc_add_theme(hc_theme_smpl())
+7.059317e-03^100
+7.059317e-03*100
+library("highcharter")
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}", c("returns"))
+tltip <- tooltip_table(x, y)
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}")),
+pointFormat = tltip) %>%
+hc_add_theme(hc_theme_smpl())
+library("highcharter")
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}", c("returns"))
+tltip <- tooltip_table(x, y)
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}<br>")),
+pointFormat = tltip) %>%
+hc_add_theme(hc_theme_smpl())
+library("highcharter")
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}", c("returns"))
+tltip <- tooltip_table(x, y)
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}<br>")),
+pointFormat = tltip) %>%
+hc_add_theme(hc_theme_smpl())
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}", c("returns"))
+tltip <- tooltip_table(x, y)
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}")),
+pointFormat = tltip) %>%
+hc_add_theme(hc_theme_smpl())
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_add_theme(hc_theme_smpl())
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}")),
+pointFormat = tltip) %>%
+hc_add_theme(hc_theme_smpl())
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_add_theme(hc_theme_smpl())
+highchart() %>%
+"scatter",
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}", c("returns"))
+tltip <- tooltip_table(x, y)
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+hcaes(x = date,
+hc_yAxis(title = list(text = "percentage of tastiness"),
+hc_tooltip(shared = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}")) %>%
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}")),
+pointFormat = tltip) %>%
+hc_add_theme(hc_theme_smpl())
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}")),
+pointFormat = tltip) %>%
+hc_add_theme(hc_theme_smpl())
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE,
+headerFormat = as.character(tags$small("{point.x:%Y %b %d}"))) %>%
+hc_add_theme(hc_theme_smpl())
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE,
+headerFormat = "{point.x:%Y %b %d}") %>%
+hc_add_theme(hc_theme_smpl())
+y <- sprintf("{point.%s:.2f}", c("returns"))
+tltip <- tooltip_table(x, y)
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character(tags$small("{point.x:%d %B, %Y}"))) %>%
+hc_add_theme(hc_theme_smpl())
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}%", c("returns"))
+tltip <- tooltip_table(x, y)
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character(tags$small("{point.x:%d %B, %Y}"))) %>%
+hc_add_theme(hc_theme_smpl())
+)
+)
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}%", "returns")
+tltip <- tooltip_table(x, y)
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character(tags$small("{point.x:%d %B, %Y}"))) %>%
+hc_add_theme(hc_theme_smpl())
+y <- sprintf("{point.%s:.2f}", "returns")
+tltip <- tooltip_table(x, y)
+x <- c("Retorno")
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+hc_add_theme(hc_theme_smpl())
+x <- c("Retorno <br>")
+y <- sprintf("{point.%s:.2f}", "returns")
+tltip <- tooltip_table(x, y)
+highchart() %>%
+hc_add_series(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+hc_add_theme(hc_theme_smpl())
+tltip
+x <- c("Min", "Median", "Max")
+y <- sprintf("{point.%s}", c("lower", "median", "upper"))
+tltip <- tooltip_table(x, y)
+tltip
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+hc_add_theme(hc_theme_smpl())
+x <- c("Retorno")
+tltip <- tooltip_table(x, y)
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+hc_add_theme(hc_theme_smpl())
+y <- sprintf("{point.%s:.2f}", "returns")
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}", "returns")
+tltip <- tooltip_table(x, y)
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+hc_add_theme(hc_theme_smpl())
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+hc_add_theme(hc_theme_smpl())
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = "") %>%
+hc_add_theme(hc_theme_smpl())
+data("weather")
+x <- c("Min", "Mean", "Max")
+y <- sprintf("{point.%s}", c("min_temperaturec", "mean_temperaturec", "max_temperaturec"))
+tltip <- tooltip_table(x, y)
+hchart(weather, type = "columnrange",
+hcaes(x = date, low = min_temperaturec, high = max_temperaturec,
+color = mean_temperaturec)) %>%
+hc_chart(polar = TRUE) %>%
+hc_yAxis( max = 30, min = -10, labels = list(format = "{value} C"),
+showFirstLabel = FALSE) %>%
+hc_xAxis(
+title = list(text = ""), gridLineWidth = 0.5,
+labels = list(format = "{value: %b}")) %>%
+hc_tooltip(useHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character(tags$small("{point.x:%d %B, %Y}")))
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}", c("returns"))
+tltip <- tooltip_table(x, y)
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+hc_add_theme(hc_theme_smpl())
+x <- c("Retorno")
+tltip <- tooltip_table(x, y)
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"scatter",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+hc_add_theme(hc_theme_smpl())
+y <- sprintf("{point.y.%s:.2f}", c("returns"))
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}", c("returns"))
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"point",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+hc_add_theme(hc_theme_smpl())
+hchart(portfolio_returns_monthly %>% mutate(returns = returns*100),
+"line",
+hcaes(x = date,
+y = returns,
+size = returns)) %>%
+hc_yAxis(title = list(text = "percentage of tastiness"),
+labels = list(format = "{value}%"))  %>%
+hc_tooltip(shared = TRUE,
+userHTML = TRUE, pointFormat = tltip,
+headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+hc_add_theme(hc_theme_smpl())
+portfolio_returns_monthly
+as.xts(portfolio_returns_monthly)
+as.xts(portfolio_returns_monthly, dateFormat = portfolio_returns_monthly$date)
+as.xts(portfolio_returns_monthly$returns , dateFormat = portfolio_returns_monthly$date)
+highchart(type = "stock") %>%
+hc_title(text = "Portfolio Monthly Returns") %>%
+hc_add_series(portfolio_returns_monthly,
+name = "Rebalanced Monthly",
+color = "cornflowerblue") %>%
+hc_add_theme(hc_theme_flat()) %>%
+hc_navigator(enabled = FALSE) %>%
+hc_scrollbar(enabled = FALSE) %>%
+hc_legend(enabled = TRUE) %>%
+hc_exporting(enabled = TRUE)
+highchart(type = "stock") %>%
+hc_title(text = "Portfolio Monthly Returns") %>%
+hc_add_series(portfolio_returns_monthly %>%
+tk_tbl(preserve_index = TRUE,
+rename_index = "date"),
+name = "Rebalanced Monthly",
+color = "cornflowerblue") %>%
+hc_add_theme(hc_theme_flat()) %>%
+hc_navigator(enabled = FALSE) %>%
+hc_scrollbar(enabled = FALSE) %>%
+hc_legend(enabled = TRUE) %>%
+hc_exporting(enabled = TRUE)
+highchart(type = "stock") %>%
+hc_title(text = "Portfolio Monthly Returns") %>%
+hc_add_series(portfolio_returns_monthly %>%
+timetk::tk_tbl(preserve_index = TRUE,
+rename_index = "date"),
+name = "Rebalanced Monthly",
+color = "cornflowerblue") %>%
+hc_add_theme(hc_theme_flat()) %>%
+hc_navigator(enabled = FALSE) %>%
+hc_scrollbar(enabled = FALSE) %>%
+hc_legend(enabled = TRUE) %>%
+hc_exporting(enabled = TRUE)
+portfolio_returns_monthly %>%
+timetk::tk_tbl(preserve_index = TRUE,
+rename_index = "date")
+portfolio_returns_monthly
+?tk_tbl
+highchart(type = "stock") %>%
+hc_title(text = "Portfolio Monthly Returns") %>%
+hc_add_series(portfolio_returns_monthly %>%
+timetk::tk_xts(preserve_index = TRUE,
+rename_index = "date"),
+name = "Rebalanced Monthly",
+color = "cornflowerblue") %>%
+hc_add_theme(hc_theme_flat()) %>%
+hc_navigator(enabled = FALSE) %>%
+hc_scrollbar(enabled = FALSE) %>%
+hc_legend(enabled = TRUE) %>%
+hc_exporting(enabled = TRUE)
+highchart(type = "stock") %>%
+hc_title(text = "Portfolio Monthly Returns") %>%
+hc_add_series(portfolio_returns_monthly %>%
+timetk::tk_xts(select = "date",
+data_var = "date"),
+name = "Rebalanced Monthly",
+color = "cornflowerblue") %>%
+hc_add_theme(hc_theme_flat()) %>%
+hc_navigator(enabled = FALSE) %>%
+hc_scrollbar(enabled = FALSE) %>%
+hc_legend(enabled = TRUE) %>%
+hc_exporting(enabled = TRUE)
+highchart(type = "stock") %>%
+hc_title(text = "Portfolio Monthly Returns") %>%
+hc_add_series(portfolio_returns_monthly %>%
+timetk::tk_xts(select = "returns",
+data_var = "date"),
+name = "Rebalanced Monthly",
+color = "cornflowerblue") %>%
+hc_add_theme(hc_theme_flat()) %>%
+hc_navigator(enabled = FALSE) %>%
+hc_scrollbar(enabled = FALSE) %>%
+hc_legend(enabled = TRUE) %>%
+hc_exporting(enabled = TRUE)
+highchart(type = "stock") %>%
+hc_title(text = "Portfolio Monthly Returns") %>%
+hc_add_series(portfolio_returns_monthly %>%
+timetk::tk_xts(select = "returns",
+date_var = "date"),
+name = "Rebalanced Monthly",
+color = "cornflowerblue") %>%
+hc_add_theme(hc_theme_flat()) %>%
+hc_navigator(enabled = FALSE) %>%
+hc_scrollbar(enabled = FALSE) %>%
+hc_legend(enabled = TRUE) %>%
+hc_exporting(enabled = TRUE)
+library("highcharter")
+highchart(type = "stock") %>%
+hc_title(text = "Retornos Mensuales del Portafolio") %>%
+hc_add_series(portfolio_returns_monthly %>%
+timetk::tk_xts(select = "returns",
+date_var = "date"),
+name = "Rebalanceado Mensuales",
+color = "cornflowerblue") %>%
+hc_add_theme(hc_theme_flat()) %>%
+hc_navigator(enabled = FALSE) %>%
+hc_scrollbar(enabled = FALSE) %>%
+hc_legend(enabled = TRUE) %>%
+hc_exporting(enabled = TRUE)
+library("highcharter")
+highchart(type = "stock") %>%
+hc_title(text = "Retornos Mensuales del Portafolio") %>%
+hc_add_series(portfolio_returns_monthly %>%
+timetk::tk_xts(select = "returns",
+date_var = "date"),
+name = "Rebalanceado Mensuales",
+color = "cornflowerblue") %>%
+hc_add_theme(hc_theme_flat()) %>%
+hc_navigator(enabled = FALSE) %>%
+hc_scrollbar(enabled = FALSE) %>%
+hc_legend(enabled = TRUE) %>%
+hc_exporting(enabled = TRUE)

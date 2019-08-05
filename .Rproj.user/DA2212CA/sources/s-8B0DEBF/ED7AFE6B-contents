@@ -1,0 +1,387 @@
+---
+title: "buenas prácticas en R para un código limpio y entendible"
+author: '<p style="font-size:30px;color:#ffffff;text-shadow:2px 2px 2px #000;"> Gabriel Cabrera G. <br> Universidad de Chile</p>'
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/my-theme.css", "css/my-fonts.css"]
+    seal: false 
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      ratio: '16:9'
+    includes:
+      in_header: header.html 
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300, echo = FALSE,
+  fig.align = "center", out.width = "80%", cache = FALSE)
+library(tidyverse)
+library(wesanderson)
+library(gganimate)
+```
+
+class: title-slide, top, left
+background-image: url(img/esteban-lopez-482075-unsplash.jpg)
+background-size: cover
+
+
+# `r rmarkdown::metadata$title`
+
+### `r rmarkdown::metadata$author`
+
+.footnote[
+<img src="img/RStudio-Logo-White.png" alt="rstudio" style="float:left;width:150px;"/>
+]
+
+---
+class: inverse, center, middle
+
+<img style="border-radius: 50%; border:3px solid #ffffff;" src="http://gcabrerag.rbind.io/img/glitch.gif" width="150px"/>
+
+# Me pueden encontrar...
+
+<a href="mailto:gcabrerag@fen.uchile.cl"><i class="fa fa-paper-plane fa-fw"></i>&nbsp;gcabrerag@fen.uchile.cl</a><br>
+<a href="https://gcabrerag.rbind.io/"><i class="fa fa-link fa-fw"></i>&nbsp; gcabrerag.rbind.io</a><br>
+<a href="https://twitter.com/GaboC_g"><i class="fa fa-twitter fa-fw"></i>&nbsp; @GaboC_g</a><br>
+<a href="http://github.com/GaboC_g"><i class="fa fa-github fa-fw"></i>&nbsp; @GaboC_g</a><br>
+<a href="http://pregrado.fen.uchile.cl/"><i class="fa fa-map-marker fa-fw"></i>&nbsp; Facultad de Economía & Negocios, Universidad de Chile </a>
+---
+class: middle
+
+<blockquote cite="http://www.worldwildlife.org/who/index.html">
+
+"With great power, comes great responsibility"
+
+<p align="right" style="font-size:20px"> Spiderman,<i> Amazing Fantasy #15 </i>.</p>
+
+</blockquote>
+
+---
+class: center, inverse, middle
+
+# Elementos de RStudio
+
+---
+# ¿Qué es real?
+
++ Lo real debe responder a la construcción del script (`ctrl + shift + n`) y no a
+lo que se encuentra en nuestro *Global Environment*.
+
++ Lo anterior implica que nuestro script crea nuestro *Global Environment* y no
+viceversa.
+
++ Esto tendrá más sentido cuando estemos trabajando en varios "proyectos" y 
+queramos que estos permanezcan independientes. 
+
++ Para no cometer este error, RStudio nos dá la opción de nunca guardar/restaurar el 
+*.RData* en nuestro *workspace*.
+
+---
+background-image: url(gifs/rdata.gif)
+background-size: contain
+
+---
+# ¿Donde vive tu análisis?
+
++ La respuesta: en el directorio. Si bien puede ser un poco obvio, para RStudio 
+no lo es.
+
++ R reconoce tanto *slash* ('/') y *backslash* ('\'), pero en el caso de Windows 
+a veces tendremos que usar ("\\") debido que para R un sólo *backslash* tiene otro
+significado.
+
++ Para saber el directorio escribimos en la consola `getwd()` y para configurarlo
+`setwd()`.
+    ```{r, echo=TRUE, eval=FALSE}
+    # obtenemos el directorio en el que estemos trabajando
+    getwd()
+    
+    # seteamos el directorio
+    setwd("C:/Users/Habac/Dropbox/")
+    ```
++ Sin embargo, es invasivo desde el punto de vista de un tercero.
+
+---
+# RStudio Projects
+
++ Un RStudio Projects o simplemente proyecto, es la herramienta que nos permite 
+dejar todos nuestros archivos (scripts, bases de datos, figuras, etc) "anclado" 
+a una misma carpeta.
+
++ Para generar un proyecto, click **File -> New Proyect... -> New Directory o Existing Directory**.
+
+--
+
+```{r out.width="50%", echo = FALSE}
+knitr::include_graphics("img/pow.jpg")
+```
+
+---
+background-image: url(gifs/proyect.gif)
+background-size: contain
+
+---
+# Consideraciones en un RStudio Projects
+
++ Cuando queramos abrir el proyecto debemos hacer click en el archivo con extensión `.Rproj`, 
+luego se abrirá RStudio.
+
++ El `.Rproj` contendrá las opciones del proyecto, se puede abrir desde la pestaña *files*.
+Por defecto tendrá las opciones globales de RStudio.
+
++ Como la dirección de nuestros archivos parte en la carpeta que contiene el `.Rproj`,
+si queremos movernos por carpetas, solo podremos ir hacia "adelante". Si queremos llamar
+algún archivo de carpetas más externas podemos usar el paquete `here`.
+    ```{r, echo=TRUE, eval=FALSE}
+    install.packages("here")
+    library("here")
+    ```
+
+---
+class: center, inverse, middle
+
+# Paquetes 
+
+---
+# Instalación de paquetes
+
+* El mismo problema que teníamos con la utilización del directorio surgue con los 
+paquetes.
+
+* La solucion:
+
+    * Instalar el paquete y luego dejarlo como comentario. Sin embargo, quien 
+      quiera utilizar el código va a tener que "sacar" el comentario.
+      ```{r, echo=TRUE}
+      # install.packages("tidyverse")
+      library("tidyverse")
+      ```
+    * RStudio tiene la opción de mostrar al usuario cuando un script contiene
+      paquetes no instalados y mediante un click agregarlos al computador.
+      
+    * Utilizar un paquete para administrar paquetes, como `pacman`.
+          
+---
+# Packages Management (pacman)
+
+La librería pacman realiza las siguientes actividades:
+
+| Función Pacman | Paquete equivalente        | Descripción                  |
+|:---------------|:---------------------------|:-----------------------------|
+| p_load         | install.packages + library | Carga e instala los paquetes |
+| p_install      | install.packages           | Instala paquetes desde CRAN  |
+| p_load_gh      | none                       | Carga e instala del github   |
+
+Existen más opciones, pero no serán necesarias para la sesión.
+
+```{r, echo=TRUE, eval=FALSE}
+# Cargamos pacman y si no está, lo instala
+if(!require("pacman")) install.packages("pacman") 
+p_load("tidyverse", "babynames")
+```
+
+En `p_load` agregan todos las librerías que deseen.
+
+---
+# Consideraciones 
+
++ Un paquete basicamente contiene funciones, datos y su documentación, que pueden ser "llamadas" sin
+necesidades de cargar el paquete usando `library` o `require`.
+    ```{r, echo=TRUE, eval=FALSE}
+    babynames::babynames
+    ```
+    **El último paquete "llamado" es la última función cargada!!!**
++ Cada instalación de R genera mínimo dos directorios:
+
+    a. Para los paquetes  que vienen por defecto con la versión instalada (base, stat, etc).
+    
+    b. Para todo paquete que el usuario instale. 
+  
++ La diferencia entre `library` y `require`  es que sucede cuando un paquete no es encontrado. 
+Mientras el primero arroja un error, el segundo muestra un mensaje y retorna un `FALSE`. 
+
+---
+class: center, inverse, middle
+
+# R Code Sintaxis
+
+---
+# Comparación entre las sintaxis
+
++ Existen tres sintaxis, **Dollar sign**, **Formula** y **Tidyverse**.
+
+    + Dollar Sign:
+        ```{r,echo=TRUE, eval=FALSE}
+        mean(mtcars$mpg)
+        ```
+    + Formula:
+        ```{r, echo=TRUE, eval=FALSE}
+        # install.packages("mosaic")
+        mosaic::mean_(~mpg, data = mtcars)
+        ```
+    + Tidyverse:
+        ```{r, echo=TRUE, eval=FALSE}
+        mtcars %>% dplyr::summarize(mean(mpg)) 
+        ```
+
+---
+background-image: url(https://avatars1.githubusercontent.com/u/22032646?s=200&v=4)
+background-size: 90px
+background-position: 97% 5%
+
+# tidyverse
+
+El `tidyverse` es lo que se demonina un **megapaquete**, es decir, que contiene
+varios paquetes y dependencias. Su *core* son:
+
+* `ggplot2`: Visualización de datos.
+* `tibble`: Construcción de "data frames".
+* `readr`: Importar datos.
+* `purrr`: Iteraciones.
+* `dplyr`: Manipulación de datos.
+* `stringr`: Manipulación de *string*.
+* `forcats`: Soluciona el problema de los factores.
+
+Tanto los paquetes como sus dependencias compare la misma "filosofía" (*tidy*) de datos y 
+programación.
+---
+# Workflow usando `tidyverse`
+
+![](https://rstudio-education.github.io/tidyverse-cookbook/images/data-science-workflow.png)
+
+---
+class: center, inverse, middle
+
+# Estilo del Código
+---
+# Nombrar objetos
+
++ Las variables y las funciones deben ir en minúscula.
+
++ Usar un guion bajo (_) para separar palabra dentro de un nombre (no usar . ). 
+Pueden usar *Camel Case*, pero deben ser consistente.
+    
+    ```r
+    # Bien
+    dia_uno
+    dia_1
+    
+    # Mal
+    primer_dia_del_mes
+    DiaUno # Camel Case
+    diauno
+    ```
+
++ No usar nombres de objetos que están asignados a funciones o variables existentes en R.
+    
+    ```r
+    # Variables existentes
+    T <- FALSE # T es igual a TRUE
+    c <- 10 # combina valores a un vector
+    ```
+---
+# Espaciado
+
++ Agregar un espacio luego de todo operador (=, +, -, <-, etc.), lo mismo 
+se aplica a las funciones.
+    ```{r, echo=TRUE}
+    # Bien
+    promedio <- mean(10 / 2 + 20 / 2, na.rm = TRUE)
+    
+    # Mal
+    promedio <- mean(10/2+20/2,na.rm=TRUE)
+    ```
++ La excepción es para :, :: y $.
+    ```{r, echo=TRUE}
+    # Bien
+    x <- 1:10
+    
+    # Mal
+    x <- 1 : 10
+    ```
+
++ Luego de un paréntesis agregar un espacio (solo para funciones).
+---
+# longitud de línea
+
++ Se recomienda ajustar el límite del código a 80 caracteres, esto permite 
+que al usar R Markdown, nuestro código no escape del margen. 
+
+
+
+---
+# Operador de Asignación
+
++ El operador (<-) es para asignar valores a un objeto. 
+
++ El operador (=) si bien cumple el mismo objetivo que el operador (<-), no es lo
+mismo cuando estamos programando.
+
++ El operador (=) es para asignar valores a las opciones dentro de las funciones de un paquete.
+Esto permite ayudar a la facilidad de lectura (*readability*).
+
+---
+# Comentarios 
+
++ Para generar comentarios se usa el símbolo (#).
+
++ Los comentarios deben explicar el "por qué" y no el "qué".
+
++ Con `ctrl + shift + r` generamos una sección de comentarios.
+
++ R no posee **Multi-line Comments**, pero si seleccionamos varias lineas con
+`ctrl + shift + c` podemos dejarlas como comentarios.
+
+---
+class: center, inverse, middle
+
+# Pedir Ayuda y Aprender Más
+
+---
+# ¿Donde buscar?
+
++ Si no puedes avanzar en una tarea, comienza con Google. Añadiendo "R" a la 
+busqueda, será suficiente para reducir las posibilidades.
+
++ Google es muy útil para solucionar los errores, si te aparece un error y no sabes
+como solucionarlo, *googlealo*.
+
++ Si Google no es suficiente para tí, prueba con [stackoverflow](https://stackoverflow.com/)
+o me escriben `r emo::ji("smile")`.
+
+--
+.pull-left[
+
+```{r out.width="60%", echo = FALSE}
+knitr::include_graphics("img/stack_one.jpg")
+```
+
+
+]
+
+--
+.pull-right[
+
+```{r out.width="60%", echo = FALSE}
+knitr::include_graphics("img/stack_two.png")
+```
+
+]
+
+---
+class: center, middle
+
+# Muchas Gracias
+
+<iframe src="https://giphy.com/embed/YTFHYijkKsXjW" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/thank-YTFHYijkKsXjW"></a></p>
+
+Slides creadas por el paquete de R [**xaringan**](https://github.com/yihui/xaringan).
+
+El chakra proviene [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), y [R Markdown](https://rmarkdown.rstudio.com).
+

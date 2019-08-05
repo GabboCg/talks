@@ -1,0 +1,29 @@
+x <- c("Retorno")
+y <- sprintf("{point.%s:.2f}", c("returns"))
+tltip <- tooltip_table(x, y)
+
+hchart(as.xts(portfolio_returns_monthly$returns , dateFormat = portfolio_returns_monthly$date) %>% mutate(returns = returns*100), 
+       "line", 
+       hcaes(x = date, 
+             y = returns,
+             size = returns)) %>% 
+  hc_yAxis(title = list(text = "percentage of tastiness"),
+           labels = list(format = "{value}%"))  %>% 
+  hc_tooltip(shared = TRUE,
+             userHTML = TRUE, pointFormat = tltip,
+             headerFormat = as.character("{point.x:%d %B, %Y}")) %>%
+  
+  hc_add_theme(hc_theme_smpl())
+
+highchart(type = "stock") %>%
+  hc_title(text = "Retornos Mensuales del Portafolio") %>%
+  hc_add_series(portfolio_returns_monthly %>% 
+                timetk::tk_xts(select = "returns",
+                               date_var = "date"),
+                name = "Rebalanceado Mensuales",
+                color = "cornflowerblue") %>%
+  hc_add_theme(hc_theme_flat()) %>%
+  hc_navigator(enabled = FALSE) %>%
+  hc_scrollbar(enabled = FALSE) %>%
+  hc_legend(enabled = TRUE) %>%
+  hc_exporting(enabled = TRUE)

@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1564606185578.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1426878716",
+    "id" : "8A749831",
+    "lastKnownWriteTime" : 1564608054,
+    "last_content_update" : 1564608054101,
+    "path" : "~/Dropbox/Documentos/Gabos-world/personal-proyects/talks/xaringan/enmec_A1/index.Rmd",
+    "project_path" : "xaringan/enmec_A1/index.Rmd",
+    "properties" : {
+        "cursorPosition" : "63,0",
+        "last_setup_crc32" : "86A4A6D9e907aa8d",
+        "scrollLine" : "19"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
