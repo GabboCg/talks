@@ -313,7 +313,9 @@ se aplica a las funciones.
 + Se recomienda ajustar el límite del código a 80 caracteres, esto permite 
 que al usar R Markdown, nuestro código no escape del margen. 
 
-
+```{r out.width="60%", echo = FALSE}
+knitr::include_graphics("gifs/line.gif")
+```
 
 ---
 # Operador de Asignación
