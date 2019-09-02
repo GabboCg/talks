@@ -187,8 +187,6 @@ tbill_daily_tbl <- tq_get("DGS10",
   periodicity = "daily")
 ```
 
-
-
 ---
 # Transformación
   
@@ -245,7 +243,7 @@ DT::datatable(stocks_monthly_tbl,
   colnames = c('Fecha', symbols),
   options = list(
   columnDefs = list(list(className = 'dt-center', targets = c(1,2,3,4,5))),
-  pageLength = 5,
+  pageLength = 4,
   lengthMenu = c(1,2,3,4,5),
   columnDefs = list(list(width = '20%', targets = list(1,2,3,4,5))))) %>% DT::formatRound(symbols, 2)
 ```
@@ -294,7 +292,7 @@ DT::datatable(stock_returns_acum_monthly_tbl,
   colnames = c('Fecha', symbols),
   options = list(
   columnDefs = list(list(className = 'dt-center', targets = c(1,2,3,4,5))),
-  pageLength = 2,
+  pageLength = 1,
   lengthMenu = c(1,2,3,4,5),
   columnDefs = list(list(width = '20%', targets = list(1,2,3,4,5))))) %>% DT::formatRound(symbols, 4)
 ```
@@ -337,7 +335,8 @@ stock_returns_monthly_tbl  %>%
   gather(symbol, returns, -date) %>% 
   ggplot(mapping = aes(x = returns, fill = symbol)) +
   geom_density(alpha = 0.5) +
-  labs(title = "Retornos", subtitle = "Facebook (FB), Amazon (AMZN), Netflix (NFLX) y Google (GOOG)",
+  labs(title = "Retornos", 
+       subtitle = "Facebook (FB), Amazon (AMZN), Netflix (NFLX) y Google (GOOG)",
        x = "Retornos diarios", y = "Densidad") + 
   theme_tq() +
   scale_fill_tq() + 
@@ -373,7 +372,8 @@ stock_returns_acum_monthly_tbl %>%
   gather(symbol, returns_acum, -date) %>% 
   ggplot(mapping = aes(x = date, y = returns_acum, color = symbol)) +
   geom_line() + 
-  labs(title = "Retornos Acumulado", subtitle = "Facebook (FB), Amazon (AMZN), Netflix (NFLX) y Google (GOOG)",
+  labs(title = "Retornos Acumulado", 
+       subtitle = "Facebook (FB), Amazon (AMZN), Netflix (NFLX) y Google (GOOG)",
           x = "Periodo", y = "Retorno Acumulado") + 
   theme_tq() +
   scale_fill_tq() + 
@@ -394,12 +394,43 @@ class: center, inverse, middle
 
 2. Las bases provienen de la **Teoría de Dow**.
 
-3. En esta sesiones veremos las *Bandas de Bollinger*<sup>2</sup>.
+3. En esta sesiones veremos:
 
-.footnote[
-[2] Proximamente *Bar Chart* y *Candlestick Chart*.
-]
- 
+    a. *Candlestick Chart*
+
+    b. *Bandas de Bollinger*
+
+---
+# Análisis Técnico: Candle Stick
+
+```r
+end <- as_date("2018-07-31")
+
+sp500_tbl  %>%
+    ggplot(aes(x = date, y = close)) +
+    geom_candlestick(aes(open = open, high = high, low = low, close = close)) +
+    labs(title = "Standard & Poor 500 Candle Stick", 
+         subtitle = "CStick, últimos 6 meses",
+         y = "Closing Price", x = "") + 
+    coord_x_date(xlim = c(end - weeks(12), end),
+               ylim = c(2500, 3000)) + 
+    theme_tq()
+```
+---
+```{r, echo=FALSE, fig.width = 7, fig.height = 4, fig.align='center', message=FALSE, warning=FALSE}
+end <- as_date("2018-07-31")
+
+sp500_tbl  %>%
+    ggplot(aes(x = date, y = close)) +
+    geom_candlestick(aes(open = open, high = high, low = low, close = close)) +
+    labs(title = "Standard & Poor 500 Candle Stick", 
+         subtitle = "CStick, últimos 6 meses",
+         y = "Closing Price", x = "") + 
+    coord_x_date(xlim = c(end - weeks(12), end),
+               ylim = c(2500, 3000)) + 
+    theme_tq()
+```
+
 ---
 # Análisis Técnico: Bandas de Bollinger 
 
@@ -435,7 +466,7 @@ sp500_tbl %>%
              high = high, low = low, close = close)) +
 * geom_candlestick() +                                   
 * geom_bbands(ma_fun = SMA, sd = 2, n = 20) +             
-  labs(title = "Standard & Poor 500 Candlestick Chart", 
+  labs(title = "Standard & Poor 500", 
        subtitle = "BBands con SMA", 
        y = "Precio de Cierre", x = "Fecha") + 
   coord_x_date(xlim = c(end - weeks(12), end),
@@ -451,7 +482,7 @@ sp500_tbl %>%
              high = high, low = low, close = close)) +
   geom_candlestick() +
   geom_bbands(ma_fun = SMA, sd = 2, n = 20) +           
-  labs(title = "Standard & Poor 500 Candlestick Chart",   
+  labs(title = "Standard & Poor 500",   
        subtitle = "BBands con SMA, últimos 6 meses", 
        y = "Precio de Cierre", x = "Fecha") + 
   coord_x_date(xlim = c(end - weeks(12), end),
